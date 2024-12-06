@@ -12,7 +12,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK {{ matrix.jdk }}
+      - name: Set up JDK
         uses: actions/setup-java@v2
         with:
           java-version: "{{ matrix.jdk }}"
