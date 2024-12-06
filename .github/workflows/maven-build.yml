@@ -12,11 +12,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up JDK
+      - name: Set up JDK ${{ matrix.jdk }}
         uses: actions/setup-java@v2
         with:
-          java-version: "{{ matrix.jdk }}"
-          distribution: "adopt"
+          java-version: '${{ matrix.jdk }}'
+          distribution: 'adopt'
 
       - name: Cache Maven packages
         uses: actions/cache@v4
