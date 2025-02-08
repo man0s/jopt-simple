@@ -40,7 +40,7 @@ import joptsimple.internal.Messages;
  *
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-public class DateConverter implements ValueConverter<Date> {
+public final class DateConverter implements ValueConverter<Date> {
     private final DateFormat formatter;
 
     /**
@@ -53,7 +53,7 @@ public class DateConverter implements ValueConverter<Date> {
         if ( formatter == null )
             throw new NullPointerException( "illegal null formatter" );
 
-        this.formatter = formatter;
+        this.formatter = (DateFormat) formatter.clone();
     }
 
     /**
