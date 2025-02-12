@@ -245,8 +245,11 @@ public class OptionParser implements OptionDeclarer {
      */
     public OptionParser( String optionSpecification ) {
         this();
+        configureOptionSpecTokenizer(optionSpecification);
+    }
 
-        new OptionSpecTokenizer( optionSpecification ).configure( this );
+    private void configureOptionSpecTokenizer(String optionSpecification) {
+        new OptionSpecTokenizer(optionSpecification).configure(this);
     }
 
     @Override
