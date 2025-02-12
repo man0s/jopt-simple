@@ -32,9 +32,9 @@ import java.util.ResourceBundle;
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-public class Messages {
+public final class Messages {
     private Messages() {
-        throw new UnsupportedOperationException();
+        // Private constructor to prevent instantiation
     }
 
     public static String message( Locale locale, String bundleName, Class<?> type, String key, Object... args ) {
