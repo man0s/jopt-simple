@@ -42,10 +42,10 @@ class OptionSpecTokenizer {
     private int index;
 
     OptionSpecTokenizer( String specification ) {
-        this.specification = specification;
-
         if ( specification == null ) {
-            throw new NullPointerException( "null option specification" );
+            this.specification = "";
+        } else {
+            this.specification = specification;
         }
     }
 
