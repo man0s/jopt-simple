@@ -5,6 +5,11 @@
         <src>images/jopt-simple-logo.png</src>
         <href>http://pholser.github.com/jopt-simple/</href>
     </bannerLeft>
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>2.0.1</version>
+    </skin>
     <body>
         <menu name="JOpt Simple">
             <item name="Overview" href="index.html"/>
