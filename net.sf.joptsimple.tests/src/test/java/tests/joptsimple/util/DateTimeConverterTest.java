@@ -42,7 +42,7 @@ import joptsimple.converter.DateTimeConverter;
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-public class DateConverterTest {
+public class DateTimeConverterTest {
 
     private DateTimeConverter converter;
 
