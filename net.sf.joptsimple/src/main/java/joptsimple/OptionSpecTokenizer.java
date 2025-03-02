@@ -26,6 +26,7 @@
 package joptsimple;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 import static joptsimple.ParserRules.*;
 
@@ -41,12 +42,8 @@ class OptionSpecTokenizer {
     private String specification;
     private int index;
 
-    OptionSpecTokenizer( String specification ) {
-        if ( specification == null ) {
-            this.specification = "";
-        } else {
-            this.specification = specification;
-        }
+    OptionSpecTokenizer(String specification) {
+        this.specification = Objects.requireNonNull( "specification must not be null." );
     }
 
     boolean hasMore() {
