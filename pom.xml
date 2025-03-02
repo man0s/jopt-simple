@@ -62,46 +62,23 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>2.9.7</version>
-            </dependency>
-
-            <dependency>
                 <groupId>org.apache.ant</groupId>
                 <artifactId>ant</artifactId>
                 <version>1.10.11</version>
             </dependency>
 
             <dependency>
-                <groupId>org.hamcrest</groupId>
-                <artifactId>hamcrest-core</artifactId>
-                <version>2.2</version>
-            </dependency>
-
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.13.1</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.hamcrest</groupId>
-                        <artifactId>hamcrest-core</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>org.infinitest</groupId>
-                <artifactId>continuous-testing-toolkit</artifactId>
-                <version>1.0</version>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>5.12.0</version>
                 <scope>test</scope>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.hamcrest</groupId>
-                        <artifactId>hamcrest-all</artifactId>
-                    </exclusion>
-                </exclusions>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-params</artifactId>
+                <version>5.12.0</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -226,11 +203,11 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.10.3</version>
                 <configuration>
-                    <source>1.8</source>
+                    <source>17</source>
                     <show>public</show>
                     <excludePackageNames>joptsimple.examples:joptsimple.internal:joptsimple.internal.*</excludePackageNames>
                     <links>
-                        <link>https://docs.oracle.com/javase/8/docs/api</link>
+                        <link>https://docs.oracle.com/javase/17/docs/api</link>
                     </links>
                     <bottom><![CDATA[<i>&copy; Copyright 2004-2021 Paul R. Holser, Jr.  All rights reserved. Licensed under The MIT License.</i>]]></bottom>
                 </configuration>

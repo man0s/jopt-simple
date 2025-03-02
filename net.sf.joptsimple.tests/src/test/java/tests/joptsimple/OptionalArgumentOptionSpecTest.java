@@ -25,14 +25,13 @@
 
 package tests.joptsimple;
 
-import static java.util.Collections.*;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 
 import joptsimple.ArgumentAcceptingOptionSpec;
 import joptsimple.OptionParser;
-import org.junit.Test;
-
-import static org.infinitest.toolkit.CollectionMatchers.*;
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
@@ -52,6 +51,6 @@ public class OptionalArgumentOptionSpecTest
 
     @Test
     public void optionsContents() {
-        assertThat( createNotEqualOptionSpecInstance().options(), hasSameContentsAs( singletonList( "c" ) ) );
+        assertEquals( createNotEqualOptionSpecInstance().options(), singletonList( "c" ) );
     }
 }

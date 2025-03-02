@@ -25,16 +25,20 @@
 
 package tests.joptsimple;
 
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Optional;
 
-import static java.util.Collections.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
@@ -42,7 +46,7 @@ import static org.junit.Assert.*;
 public class PopulatedOptionSetTest {
     private OptionSet populated;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         OptionParser parser = new OptionParser();
         parser.accepts( "a" );

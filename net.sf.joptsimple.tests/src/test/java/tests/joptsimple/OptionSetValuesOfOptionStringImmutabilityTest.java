@@ -25,35 +25,28 @@
 
 package tests.joptsimple;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Collections;
 import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import org.infinitest.toolkit.UnmodifiableListTestSupport;
-
-import static java.util.Collections.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-public class OptionSetValuesOfOptionStringImmutabilityTest extends UnmodifiableListTestSupport<Object> {
+public class OptionSetValuesOfOptionStringImmutabilityTest {
     @SuppressWarnings( "unchecked" )
-    @Override
-    protected List<Object> newList() {
+    @Test
+    public void listIsImmutable() {
         OptionParser parser = new OptionParser();
         parser.accepts( "b" ).withRequiredArg();
         OptionSet options = parser.parse( "-b", "foo", "-b", "bar" );
 
-        return (List<Object>) options.valuesOf( "b" );
-    }
-
-    @Override
-    protected String newItem() {
-        return "baz";
-    }
-
-    @Override
-    protected String containedItem() {
-        return "bar";
+        var list = (List<Object>) options.valuesOf( "b" );
+        assertTrue( list == Collections.unmodifiableList( list ) );
     }
 }

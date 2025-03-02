@@ -1,15 +1,16 @@
 package tests.joptsimple.examples;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.List;
 
-import static java.util.Arrays.*;
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import org.junit.Test;
-
-import static java.util.Collections.*;
-import static org.junit.Assert.*;
 
 public class OptionSynonymTest {
     @Test
@@ -22,10 +23,10 @@ public class OptionSynonymTest {
         OptionSet options = parser.parse( "--message", expectedMessage );
 
         for ( String each : synonyms ) {
-            assertTrue( each, options.has( each ) );
-            assertTrue( each, options.hasArgument( each ) );
-            assertEquals( each, expectedMessage, options.valueOf( each ) );
-            assertEquals( each, singletonList( expectedMessage ), options.valuesOf( each ) );
+            assertTrue( options.has( each ), each );
+            assertTrue( options.hasArgument( each ), each );
+            assertEquals( expectedMessage, options.valueOf( each ), each );
+            assertEquals( singletonList( expectedMessage ), options.valuesOf( each ), each );
         }
     }
 }

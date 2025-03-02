@@ -25,13 +25,14 @@
 
 package tests.joptsimple;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>

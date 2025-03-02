@@ -25,20 +25,23 @@
 
 package tests.joptsimple;
 
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionException;
 import joptsimple.OptionSet;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
 public class LongOptionNoArgumentTest extends AbstractOptionParserFixture {
-    @Before
+    @BeforeEach
     public final void initializeParser() {
         parser.accepts( "verbose" );
         parser.accepts( "verb" );
@@ -75,9 +78,7 @@ public class LongOptionNoArgumentTest extends AbstractOptionParserFixture {
 
     @Test
     public void ambiguousAbbreviation() {
-        thrown.expect( OptionException.class );
-        thrown.expect( ExceptionMatchers.withOption( "ver" ) );
-
-        parser.parse( "--ver" );
+        var exception = assertThrows( OptionException.class, () -> parser.parse( "--ver" ) );
+        assertTrue( exception.options().contains( "ver" ) );
     }
 }

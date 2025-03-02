@@ -1,21 +1,22 @@
 package tests.joptsimple.examples;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static tests.joptsimple.examples.Level.INFO;
+import static tests.joptsimple.examples.Level.WARNING;
+
 import java.io.File;
+
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
-import static tests.joptsimple.examples.Level.*;
-import static org.junit.Assert.*;
-import static org.junit.rules.ExpectedException.*;
 
 public class DefaultValuesForOptionArgumentsTest {
-    @Rule public final ExpectedException thrown = none();
 
     @Test
     public void allowsSpecificationOfDefaultValues() throws Exception {
@@ -51,8 +52,6 @@ public class DefaultValuesForOptionArgumentsTest {
         assertTrue( options.has( count ) );
         assertFalse( options.hasArgument( count ) );
 
-        thrown.expect( OptionException.class );
-
-        parser.parse( "--outdir" );
+        assertThrows( OptionException.class, () -> parser.parse( "--outdir" ) );
     }
 }

@@ -25,27 +25,31 @@
 
 package tests.joptsimple;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.math.BigInteger;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Optional;
 
-import static java.lang.Boolean.*;
-import static java.util.Collections.*;
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionException;
 import joptsimple.OptionSet;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
 public class OptionParserNewDeclarationTest extends AbstractOptionParserFixture {
-    @Test( expected = OptionException.class )
+    @Test
     public void acceptsIllegalCharacters() {
-        parser.accepts( "!" );
+        assertThrows( OptionException.class, () -> parser.accepts( "!" ) );
     }
 
     @Test
@@ -230,22 +234,22 @@ public class OptionParserNewDeclarationTest extends AbstractOptionParserFixture 
         assertEquals( emptyList(), options.nonOptionArguments() );
     }
 
-    @Test( expected = OptionException.class )
+    @Test
     public void illegalOptionArgumentMethodConversion() {
         parser.accepts( "a" ).withRequiredArg().ofType( Integer.class );
 
         OptionSet options = parser.parse( "-a", "foo" );
 
-        options.valueOf( "a" );
+        assertThrows( OptionException.class, () -> options.valueOf( "a" ) );
     }
 
-    @Test( expected = OptionException.class )
+    @Test
     public void illegalOptionArgumentConstructorConversion() {
         parser.accepts( "a" ).withRequiredArg().ofType( BigInteger.class );
 
         OptionSet options = parser.parse( "-a", "foo" );
 
-        options.valueOf( "a" );
+        assertThrows( OptionException.class, () -> options.valueOf( "a" ) );
     }
 
     @Test

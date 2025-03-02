@@ -25,19 +25,22 @@
 
 package tests.joptsimple;
 
+import static java.util.Collections.emptyList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import joptsimple.OptionException;
 import joptsimple.OptionSet;
-import org.junit.Before;
-import org.junit.Test;
-
-import static java.util.Collections.emptyList;
-import static org.junit.Assert.assertEquals;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
 public class WExtensionNoArgumentTest extends AbstractOptionParserFixture {
-    @Before
+    @BeforeEach
     public final void initializeParser() {
         parser.accepts( "silent" );
         parser.recognizeAlternativeLongOptions( true );
@@ -47,10 +50,8 @@ public class WExtensionNoArgumentTest extends AbstractOptionParserFixture {
     public void turnOffWExtension() {
         parser.recognizeAlternativeLongOptions( false );
 
-        thrown.expect( OptionException.class );
-        thrown.expect( ExceptionMatchers.withOption( "W" ) );
-
-        parser.parse( "-W", "silent" );
+        var exception = assertThrows( OptionException.class, () -> parser.parse( "-W", "silent" ));
+        assertTrue( exception.options().contains("W") );
     }
 
     @Test

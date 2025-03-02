@@ -35,7 +35,6 @@ import java.util.*;
 import joptsimple.internal.AbbreviationMap;
 import joptsimple.internal.SimpleOptionNameMap;
 import joptsimple.internal.OptionNameMap;
-import joptsimple.util.KeyValuePair;
 
 import static java.util.Collections.*;
 import static joptsimple.OptionException.*;
@@ -519,18 +518,18 @@ public class OptionParser implements OptionDeclarer {
     void handleLongOptionToken( String candidate, ArgumentList arguments, OptionSet detected ) {
         KeyValuePair optionAndArgument = parseLongOptionWithArgument( candidate );
 
-        if ( !isRecognized( optionAndArgument.key ) )
-            throw unrecognizedOption( optionAndArgument.key );
+        if ( !isRecognized( optionAndArgument.key() ) )
+            throw unrecognizedOption( optionAndArgument.key() );
 
-        AbstractOptionSpec<?> optionSpec = specFor( optionAndArgument.key );
-        optionSpec.handleOption( this, arguments, detected, optionAndArgument.value );
+        AbstractOptionSpec<?> optionSpec = specFor( optionAndArgument.key() );
+        optionSpec.handleOption( this, arguments, detected, optionAndArgument.value() );
     }
 
     void handleShortOptionToken( String candidate, ArgumentList arguments, OptionSet detected ) {
         KeyValuePair optionAndArgument = parseShortOptionWithArgument( candidate );
 
-        if ( isRecognized( optionAndArgument.key ) ) {
-            specFor( optionAndArgument.key ).handleOption( this, arguments, detected, optionAndArgument.value );
+        if ( isRecognized( optionAndArgument.key() ) ) {
+            specFor( optionAndArgument.key() ).handleOption( this, arguments, detected, optionAndArgument.value() );
         }
         else
             handleShortOptionCluster( candidate, arguments, detected );

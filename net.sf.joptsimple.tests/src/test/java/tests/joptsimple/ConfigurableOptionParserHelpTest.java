@@ -25,25 +25,21 @@
 
 package tests.joptsimple;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
-import static tests.joptsimple.Strings.EMPTY;
-import static tests.joptsimple.Strings.LINE_SEPARATOR;
-import static java.math.BigDecimal.*;
-import static java.util.Arrays.*;
-import static java.util.Collections.*;
-import static java.util.stream.Collectors.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import joptsimple.BuiltinHelpFormatter;
-import org.junit.Before;
-import org.junit.Test;
-
-import static joptsimple.util.DateConverter.*;
-import static org.junit.Assert.*;
+import joptsimple.converter.DateTimeConverter;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
@@ -51,7 +47,7 @@ import static org.junit.Assert.*;
 public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixture {
     private StringWriter sink;
 
-    @Before
+    @BeforeEach
     public final void createSink() {
         parser.formatHelpWith( new BuiltinHelpFormatter( 120, 3 ) );
         sink = new StringWriter();
@@ -61,7 +57,11 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
     public void unconfiguredParser() throws Exception {
         parser.printHelpOn( sink );
 
-        assertHelpLines( "No options specified   ", EMPTY );
+        assertHelpLines(
+            """
+            No options specified   |
+            """ );
+
     }
 
     @Test
@@ -71,10 +71,11 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option    Description",
-            "------    -----------",
-            "--apple              ",
-            EMPTY );
+            """
+            Option    Description|
+            ------    -----------|
+            --apple              |
+            """ );
     }
 
     @Test
@@ -84,10 +85,11 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option   Description     ",
-            "------   -----------     ",
-            "-a       some description",
-            EMPTY );
+            """
+            Option   Description     |
+            ------   -----------     |
+            -a       some description|
+            """ );
     }
 
     @Test
@@ -98,11 +100,12 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option      Description          ",
-            "------      -----------          ",
-            "-a          some description     ",
-            "--verbose   even more description",
-            EMPTY );
+            """
+            Option      Description          |
+            ------      -----------          |
+            -a          some description     |
+            --verbose   even more description|
+            """ );
     }
 
     @Test
@@ -112,10 +115,11 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option        Description",
-            "------        -----------",
-            "-a <String>              ",
-            EMPTY );
+            """
+            Option        Description|
+            ------        -----------|
+            -a <String>              |
+            """ );
     }
 
     @Test
@@ -125,10 +129,11 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option         Description",
-            "------         -----------",
-            "-a <Integer>              ",
-            EMPTY );
+            """
+            Option         Description|
+            ------         -----------|
+            -a <Integer>              |
+            """ );
     }
 
     @Test
@@ -138,10 +143,11 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                   Description        ",
-            "------                   -----------        ",
-            "-a <String: numerical>   some value you need",
-            EMPTY );
+            """
+            Option                   Description        |
+            ------                   -----------        |
+            -a <String: numerical>   some value you need|
+            """ );
     }
 
     @Test
@@ -152,10 +158,11 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                    Description        ",
-            "------                    -----------        ",
-            "-a <Integer: numerical>   some value you need",
-            EMPTY );
+            """
+            Option                    Description        |
+            ------                    -----------        |
+            -a <Integer: numerical>   some value you need|
+            """ );
     }
 
     @Test
@@ -165,10 +172,11 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                 Description",
-            "------                 -----------",
-            "--threshold [String]              ",
-            EMPTY );
+            """
+            Option                 Description|
+            ------                 -----------|
+            --threshold [String]              |
+            """ );
     }
 
     @Test
@@ -178,10 +186,11 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option       Description",
-            "------       -----------",
-            "-a [Float]              ",
-            EMPTY );
+            """
+            Option       Description|
+            ------       -----------|
+            -a [Float]              |
+             """ );
     }
 
     @Test
@@ -191,10 +200,11 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                                   Description        ",
-            "------                                   -----------        ",
-            "--threshold [String: positive integer]   some value you need",
-            EMPTY );
+            """
+            Option                                   Description        |
+            ------                                   -----------        |
+            --threshold [String: positive integer]   some value you need|
+            """ );
     }
 
     @Test
@@ -205,10 +215,11 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                                   Description        ",
-            "------                                   -----------        ",
-            "--threshold [Double: positive decimal]   some value you need",
-            EMPTY );
+            """
+            Option                                   Description        |
+            ------                                   -----------        |
+            --threshold [Double: positive decimal]   some value you need|
+            """ );
     }
 
     @Test
@@ -218,10 +229,11 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                   Description                     ",
-            "------                   -----------                     ",
-            "-W <String: opt=value>   Alternative form of long options",
-            EMPTY );
+            """
+            Option                   Description                     |
+            ------                   -----------                     |
+            -W <String: opt=value>   Alternative form of long options|
+            """ );
     }
 
     @Test
@@ -231,10 +243,11 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option         Description",
-            "------         -----------",
-            "-v, --chatty   be verbose ",
-            EMPTY );
+            """
+            Option         Description|
+            ------         -----------|
+            -v, --chatty   be verbose |
+            """ );
     }
 
     @Test
@@ -244,10 +257,11 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                  Description",
-            "------                  -----------",
-            "-L, --index <Integer>   set level  ",
-            EMPTY );
+            """
+            Option                  Description|
+            ------                  -----------|
+            -L, --index <Integer>   set level  |
+            """ );
     }
 
     @Test
@@ -258,10 +272,11 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                         Description",
-            "------                         -----------",
-            "-d, --since [Date: yyyyMMdd]   date filter",
-            EMPTY );
+            """
+            Option                         Description|
+            ------                         -----------|
+            -d, --since [Date: yyyyMMdd]   date filter|
+            """ );
     }
 
     @Test
@@ -271,29 +286,32 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                   Description",
-            "------                   -----------",
-            "-v, --chatty, --prolix              ",
-            EMPTY );
+            """
+            Option                   Description|
+            ------                   -----------|
+            -v, --chatty, --prolix              |
+            """ );
     }
 
     @Test
     public void bothColumnsExceedingAllocatedWidths() throws Exception {
-        parser.acceptsAll( asList( "t", "threshold", "cutoff" ),
+        parser
+            .acceptsAll( asList( "t", "threshold", "cutoff" ),
                 "a threshold value beyond which a certain level of the application should cease to write logs" )
-                .withRequiredArg()
-                .describedAs( "a positive decimal number that will represent the threshold that has been outlined" )
-                .ofType( Double.class );
+            .withRequiredArg()
+            .describedAs( "a positive decimal number that will represent the threshold that has been outlined" )
+            .ofType( Double.class );
 
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                                                     Description                                          ",
-            "------                                                     -----------                                          ",
-            "-t, --cutoff, --threshold <Double: a positive decimal      a threshold value beyond which a certain level of the",
-            "  number that will represent the threshold that has been     application should cease to write logs             ",
-            "  outlined>                                                                                                     ",
-            EMPTY );
+            """
+            Option                                                     Description                                          |
+            ------                                                     -----------                                          |
+            -t, --cutoff, --threshold <Double: a positive decimal      a threshold value beyond which a certain level of the|
+              number that will represent the threshold that has been     application should cease to write logs             |
+              outlined>                                                                                                     |
+            """ );
     }
 
     // Bug 2018262
@@ -317,104 +335,112 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.acceptsAll( asList( "f", "full-stacktrace" ),
             "Print out the full (very verbose) stacktrace for any exceptions." );
         parser.acceptsAll( asList( "t", "tasks" ), "Show list of all available tasks and their dependencies." );
-        parser.acceptsAll( asList( "p", "project-dir" ),
-            "Specifies the start dir for Gradle. Defaults to current dir." ).withRequiredArg().ofType( String.class );
-        parser.acceptsAll( asList( "g", "gradle-user-home" ), "Specifies the gradle user home dir." )
+        parser
+            .acceptsAll( asList( "p", "project-dir" ),
+                "Specifies the start dir for Gradle. Defaults to current dir." )
             .withRequiredArg().ofType( String.class );
+        parser.acceptsAll( asList( "g", "gradle-user-home" ), "Specifies the gradle user home dir." ).withRequiredArg()
+            .ofType( String.class );
         parser.acceptsAll( asList( "l", "plugin-properties-file" ), "Specifies the plugin.properties file." )
             .withRequiredArg().ofType( String.class );
-        parser.acceptsAll( asList( "b", "buildfile" ),
-            "Specifies the build file name (also for subprojects). Defaults to build.gradle." )
+        parser
+            .acceptsAll( asList( "b", "buildfile" ),
+                "Specifies the build file name (also for subprojects). Defaults to build.gradle." )
             .withRequiredArg().ofType( String.class );
         parser.acceptsAll( asList( "D", "systemprop" ), "Set system property of the JVM (e.g. -Dmyprop=myvalue)." )
             .withRequiredArg().ofType( String.class );
-        parser.acceptsAll( asList( "P", "projectprop" ),
-            "Set project property for the build script (e.g. -Pmyprop=myvalue)." )
+        parser
+            .acceptsAll( asList( "P", "projectprop" ),
+                "Set project property for the build script (e.g. -Pmyprop=myvalue)." )
             .withRequiredArg().ofType( String.class );
-        parser.acceptsAll( asList( "e", "embedded" ), "Specify an embedded build script." )
-            .withRequiredArg().ofType( String.class );
-        parser.acceptsAll( asList( "B", "bootstrap-debug" ),
-            "Specify a text to be logged at the beginning (e.g. used by Gradle's bootstrap class)." )
+        parser.acceptsAll( asList( "e", "embedded" ), "Specify an embedded build script." ).withRequiredArg()
+            .ofType( String.class );
+        parser
+            .acceptsAll( asList( "B", "bootstrap-debug" ),
+                "Specify a text to be logged at the beginning (e.g. used by Gradle's bootstrap class)." )
             .withRequiredArg().ofType( String.class );
         parser.acceptsAll( asList( "h", "?" ), "Shows this help message." ).forHelp();
 
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                                  Description                                                                    ",
-            "------                                  -----------                                                                    ",
-            "-?, -h                                  Shows this help message.                                                       ",
-            "-B, --bootstrap-debug <String>          Specify a text to be logged at the beginning (e.g. used by Gradle's bootstrap  ",
-            "                                          class).                                                                      ",
-            "-D, --systemprop <String>               Set system property of the JVM (e.g. -Dmyprop=myvalue).                        ",
-            "-I, --no-imports                        Disable usage of default imports for build script files.                       ",
-            "-P, --projectprop <String>              Set project property for the build script (e.g. -Pmyprop=myvalue).             ",
-            "-S                                      Don't trigger a System.exit(0) for normal termination. Used for Gradle's       ",
-            "                                          internal testing.                                                            ",
-            "-b, --buildfile <String>                Specifies the build file name (also for subprojects). Defaults to build.gradle.",
-            "-d, --debug                             Log in debug mode (includes normal stacktrace).                                ",
-            "-e, --embedded <String>                 Specify an embedded build script.                                              ",
-            "-f, --full-stacktrace                   Print out the full (very verbose) stacktrace for any exceptions.               ",
-            "-g, --gradle-user-home <String>         Specifies the gradle user home dir.                                            ",
-            "-i, --ivy-quiet                         Set Ivy log level to quiet.                                                    ",
-            "-j, --ivy-debug                         Set Ivy log level to debug (very verbose).                                     ",
-            "-l, --plugin-properties-file <String>   Specifies the plugin.properties file.                                          ",
-            "-n, --non-recursive                     Do not execute primary tasks of child projects.                                ",
-            "-p, --project-dir <String>              Specifies the start dir for Gradle. Defaults to current dir.                   ",
-            "-q, --quiet                             Log errors only.                                                               ",
-            "-r, --rebuild-cache                     Rebuild the cache of compiled build scripts.                                   ",
-            "-s, --stacktrace                        Print out the stacktrace also for user exceptions (e.g. compile error).        ",
-            "-t, --tasks                             Show list of all available tasks and their dependencies.                       ",
-            "-u, --no-search-upward                  Don't search in parent folders for a settings.gradle file.                     ",
-            "-v, --version                           Print version info.                                                            ",
-            "-x, --cache-off                         No caching of compiled build scripts.                                          ",
-            EMPTY );
+            """
+            Option                                  Description                                                                    |
+            ------                                  -----------                                                                    |
+            -?, -h                                  Shows this help message.                                                       |
+            -B, --bootstrap-debug <String>          Specify a text to be logged at the beginning (e.g. used by Gradle's bootstrap  |
+                                                      class).                                                                      |
+            -D, --systemprop <String>               Set system property of the JVM (e.g. -Dmyprop=myvalue).                        |
+            -I, --no-imports                        Disable usage of default imports for build script files.                       |
+            -P, --projectprop <String>              Set project property for the build script (e.g. -Pmyprop=myvalue).             |
+            -S                                      Don't trigger a System.exit(0) for normal termination. Used for Gradle's       |
+                                                      internal testing.                                                            |
+            -b, --buildfile <String>                Specifies the build file name (also for subprojects). Defaults to build.gradle.|
+            -d, --debug                             Log in debug mode (includes normal stacktrace).                                |
+            -e, --embedded <String>                 Specify an embedded build script.                                              |
+            -f, --full-stacktrace                   Print out the full (very verbose) stacktrace for any exceptions.               |
+            -g, --gradle-user-home <String>         Specifies the gradle user home dir.                                            |
+            -i, --ivy-quiet                         Set Ivy log level to quiet.                                                    |
+            -j, --ivy-debug                         Set Ivy log level to debug (very verbose).                                     |
+            -l, --plugin-properties-file <String>   Specifies the plugin.properties file.                                          |
+            -n, --non-recursive                     Do not execute primary tasks of child projects.                                |
+            -p, --project-dir <String>              Specifies the start dir for Gradle. Defaults to current dir.                   |
+            -q, --quiet                             Log errors only.                                                               |
+            -r, --rebuild-cache                     Rebuild the cache of compiled build scripts.                                   |
+            -s, --stacktrace                        Print out the stacktrace also for user exceptions (e.g. compile error).        |
+            -t, --tasks                             Show list of all available tasks and their dependencies.                       |
+            -u, --no-search-upward                  Don't search in parent folders for a settings.gradle file.                     |
+            -v, --version                           Print version info.                                                            |
+            -x, --cache-off                         No caching of compiled build scripts.                                          |
+            """ );
     }
 
     @Test
     public void dateConverterShowsDatePattern() throws Exception {
-        parser.accepts( "date", "a date" ).withRequiredArg().withValuesConvertedBy( datePattern( "MM/dd/yy" ) );
+        parser.accepts( "date", "a date" ).withRequiredArg()
+            .withValuesConvertedBy( DateTimeConverter.of( "MM/dd/yy" ) );
 
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option              Description",
-            "------              -----------",
-            "--date <MM/dd/yy>   a date     ",
-            EMPTY );
+            """
+            Option              Description|
+            ------              -----------|
+            --date <MM/dd/yy>   a date     |
+            """ );
     }
 
     @Test
     public void dateConverterShowsDatePatternInCombinationWithDescription() throws Exception {
         parser.accepts( "date", "a date" ).withOptionalArg().describedAs( "your basic date pattern" )
-            .withValuesConvertedBy( datePattern( "MM/dd/yy" ) );
+            .withValuesConvertedBy( DateTimeConverter.of( "MM/dd/yy" ) );
 
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                                       Description",
-            "------                                       -----------",
-            "--date [MM/dd/yy: your basic date pattern]   a date     ",
-            EMPTY );
+            """
+            Option                                       Description|
+            ------                                       -----------|
+            --date [MM/dd/yy: your basic date pattern]   a date     |
+             """ );
     }
 
     @Test
     public void leavesEmbeddedNewlinesInDescriptionsAlone() throws Exception {
         List<String> descriptionPieces =
             asList( "Specify the output type.", "'raw' = raw data.", "'java' = java class" );
-        parser.accepts(
-            "type",
-            descriptionPieces.stream().collect( joining( LINE_SEPARATOR ) ) );
+        parser.accepts( "type", descriptionPieces.stream().collect( Collectors.joining( Strings.LINE_SEPARATOR ) ) );
 
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option   Description             ",
-            "------   -----------             ",
-            "--type   Specify the output type.",
-            "         'raw' = raw data.       ",
-            "         'java' = java class     ",
-            EMPTY );
+            """
+            Option   Description             |
+            ------   -----------             |
+            --type   Specify the output type.|
+                     'raw' = raw data.       |
+                     'java' = java class     |
+            """ );
     }
 
     @Test
@@ -424,10 +450,11 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option        Description   ",
-            "------        -----------   ",
-            "-a <String>   (default: boo)",
-            EMPTY );
+            """
+            Option        Description   |
+            ------        -----------   |
+            -a <String>   (default: boo)|
+            """ );
     }
 
     @Test
@@ -437,38 +464,47 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option         Description ",
-            "------         ----------- ",
-            "-b [Integer]   (default: 5)",
-            EMPTY );
+            """
+            Option         Description |
+            ------         ----------- |
+            -b [Integer]   (default: 5)|
+             """ );
     }
 
     @Test
     public void includesDefaultValueForArgumentWithDescription() throws Exception {
-        parser.accepts( "c", "a quantity" ).withOptionalArg().ofType( BigDecimal.class )
-            .describedAs( "quantity" ).defaultsTo( TEN );
+        parser.accepts( "c", "a quantity" )
+            .withOptionalArg()
+            .ofType( BigDecimal.class )
+            .describedAs( "quantity" )
+            .defaultsTo( BigDecimal.TEN );
 
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                      Description             ",
-            "------                      -----------             ",
-            "-c [BigDecimal: quantity]   a quantity (default: 10)",
-            EMPTY );
+            """
+            Option                      Description             |
+            ------                      -----------             |
+            -c [BigDecimal: quantity]   a quantity (default: 10)|
+            """ );
     }
 
     @Test
     public void includesListOfDefaultsForArgumentWithDescription() throws Exception {
-        parser.accepts( "d", "dizzle" ).withOptionalArg().ofType( Integer.class )
-            .describedAs( "double dizzle" ).defaultsTo( 2, 3, 5, 7 );
+        parser.accepts( "d", "dizzle" )
+            .withOptionalArg()
+            .ofType( Integer.class )
+            .describedAs( "double dizzle" )
+            .defaultsTo( 2, 3, 5, 7 );
 
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                        Description                   ",
-            "------                        -----------                   ",
-            "-d [Integer: double dizzle]   dizzle (default: [2, 3, 5, 7])",
-            EMPTY );
+            """
+            Option                        Description                   |
+            ------                        -----------                   |
+            -d [Integer: double dizzle]   dizzle (default: [2, 3, 5, 7])|
+            """ );
     }
 
     @Test
@@ -478,15 +514,18 @@ public class ConfigurableOptionParserHelpTest extends AbstractOptionParserFixtur
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option (* = required)   Description",
-            "---------------------   -----------",
-            "* -e <String>                      ",
-            EMPTY );
+            """
+            Option (* = required)   Description|
+            ---------------------   -----------|
+            * -e <String>                      |
+            """ );
     }
 
-    private void assertHelpLines( String... expectedLines ) {
+    private void assertHelpLines( String expectedLines ) {
         assertEquals(
-            Stream.of( expectedLines ).collect( joining( LINE_SEPARATOR ) ),
+            expectedLines
+                .replace( "|\n", "\n" )
+                .replace( "\n", Strings.LINE_SEPARATOR ),
             sink.toString() );
     }
 }

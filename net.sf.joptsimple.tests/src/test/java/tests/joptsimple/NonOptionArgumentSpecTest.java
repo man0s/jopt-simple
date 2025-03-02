@@ -25,22 +25,26 @@
 
 package tests.joptsimple;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.Test;
 
 import joptsimple.NonOptionArgumentSpec;
 import joptsimple.OptionDescriptor;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import org.junit.Test;
-
-import static java.util.Arrays.*;
-import static java.util.Collections.*;
-import static joptsimple.util.DateConverter.*;
-import static org.junit.Assert.*;
+import joptsimple.converter.DateTimeConverter;
 
 public class NonOptionArgumentSpecTest extends AbstractOptionParserFixture {
     @Test
@@ -88,18 +92,19 @@ public class NonOptionArgumentSpecTest extends AbstractOptionParserFixture {
 
     @Test
     public void convertingUsingConverter() throws Exception {
-        OptionSpec<Date> date = parser.nonOptions().withValuesConvertedBy( datePattern( "MM/dd/yyyy" ) );
+        OptionSpec<TemporalAccessor> date =
+            parser.nonOptions().withValuesConvertedBy( DateTimeConverter.of( "MM/dd/yyyy" ) );
 
         OptionSet options = parser.parse( "01/24/2013" );
 
         assertEquals(
-            singletonList( new SimpleDateFormat( "MM/dd/yyyy" ).parse( "01/24/2013" ) ),
-            date.values( options ) );
+            LocalDate.from( DateTimeFormatter.ofPattern( "MM/dd/yyyy" ).parse( "01/24/2013" ) ),
+            LocalDate.from( date.value( options ) ) );
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void convertingUsingNullConverter() {
-        parser.nonOptions().withValuesConvertedBy( null );
+        assertThrows( NullPointerException.class, () -> parser.nonOptions().withValuesConvertedBy( null ) );
     }
 
     @Test
@@ -122,8 +127,7 @@ public class NonOptionArgumentSpecTest extends AbstractOptionParserFixture {
         assertEquals(
             asList(
                 NonOptionArgumentSpec.NAME,
-                NonOptionArgumentSpec.NAME
-            ),
+                NonOptionArgumentSpec.NAME ),
             options.specsWithNonOptions().stream()
                 .flatMap( s -> s.options().stream() )
                 .collect( Collectors.toList() ) );

@@ -25,20 +25,23 @@
 
 package tests.joptsimple;
 
-import joptsimple.OptionException;
-import joptsimple.OptionSet;
-import org.junit.Before;
-import org.junit.Test;
-
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import joptsimple.OptionException;
+import joptsimple.OptionSet;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
 public class WAsShortOptionTest extends AbstractOptionParserFixture {
-    @Before
+    @BeforeEach
     public final void initializeParser() {
         parser.accepts( "W" );
     }
@@ -56,9 +59,7 @@ public class WAsShortOptionTest extends AbstractOptionParserFixture {
     public void recognizeLongOptionsTrumpsShortOptionW() {
         parser.recognizeAlternativeLongOptions( true );
 
-        thrown.expect( OptionException.class );
-        thrown.expect( ExceptionMatchers.withOption( "silent" ) );
-
-        parser.parse( "-W", "silent" );
+        var exception = assertThrows( OptionException.class, () -> parser.parse( "-W", "silent" ));
+        assertTrue( exception.options().contains("silent") );
     }
 }

@@ -25,7 +25,6 @@
 
 package tests.joptsimple;
 
-import joptsimple.AbstractOptionSpec;
 import joptsimple.OptionParser;
 
 /**
@@ -53,15 +52,5 @@ public class OptionalArgumentOptionSpecValuesImmutabilityTest
     @Override
     protected String secondArg() {
         return "2";
-    }
-
-    @Override
-    protected Integer newItem() {
-        return 3;
-    }
-
-    @Override
-    protected Integer containedItem() {
-        return 2;
     }
 }

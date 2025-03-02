@@ -1,13 +1,18 @@
 package tests.joptsimple.util;
 
+import static joptsimple.converter.PathPredicate.DIRECTORY_EXISTING;
+import static joptsimple.converter.PathPredicate.FILE_EXISTING;
+import static joptsimple.converter.PathPredicate.FILE_OVERWRITABLE;
+import static joptsimple.converter.PathPredicate.NOT_EXISTING;
+import static joptsimple.converter.PathPredicate.READABLE;
+import static joptsimple.converter.PathPredicate.WRITABLE;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
-
-import static joptsimple.util.PathProperties.*;
+import org.junit.jupiter.api.Test;
 
 public class PathPropertiesTest {
     @Test

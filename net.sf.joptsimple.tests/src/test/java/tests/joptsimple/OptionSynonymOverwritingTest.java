@@ -25,17 +25,18 @@
 
 package tests.joptsimple;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionSet;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
 public class OptionSynonymOverwritingTest extends AbstractOptionParserFixture {
-    @Before
+    @BeforeEach
     public final void initializeParser() {
         parser.acceptsAll( asList( "h", "help" ) );
         parser.acceptsAll( asList( "h", "oops" ) );

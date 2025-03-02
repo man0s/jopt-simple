@@ -1,17 +1,15 @@
 package tests.joptsimple.examples;
 
+import static java.util.Arrays.asList;
+
 import java.io.File;
 import java.util.HashSet;
 import java.util.Map;
 
-import static java.io.File.*;
-import static java.util.Arrays.*;
-
 import joptsimple.HelpFormatter;
 import joptsimple.OptionDescriptor;
 import joptsimple.OptionParser;
-
-import static joptsimple.util.DateConverter.*;
+import joptsimple.converter.DateTimeConverter;
 
 public class HelpFormatterExample {
     private static class MyFormatter implements HelpFormatter {
@@ -26,7 +24,7 @@ public class HelpFormatterExample {
         private String lineFor( OptionDescriptor descriptor ) {
             if ( descriptor.representsNonOptions() ) {
                 return descriptor.argumentDescription() + '(' + descriptor.argumentTypeIndicator() + "): "
-                    + descriptor.description() + System.getProperty( "line.separator" );
+                        + descriptor.description() + System.getProperty( "line.separator" );
             }
 
             StringBuilder line = new StringBuilder( descriptor.options().toString() );
@@ -50,15 +48,15 @@ public class HelpFormatterExample {
                 accepts( "q" ).withOptionalArg().ofType( Double.class )
                     .describedAs( "quantity" );
                 accepts( "d", "some date" ).withRequiredArg().required()
-                    .withValuesConvertedBy( datePattern( "MM/dd/yy" ) );
+                    .withValuesConvertedBy( DateTimeConverter.of( "MM/dd/yy" ) );
                 acceptsAll( asList( "v", "talkative", "chatty" ), "be more verbose" );
                 accepts( "output-file" ).withOptionalArg().ofType( File.class )
-                     .describedAs( "file" );
+                    .describedAs( "file" );
                 acceptsAll( asList( "h", "?" ), "show help" ).forHelp();
                 acceptsAll( asList( "cp", "classpath" ) ).withRequiredArg()
-                    .describedAs( "path1" + pathSeparatorChar + "path2:..." )
+                    .describedAs( "path1" + File.pathSeparatorChar + "path2:..." )
                     .ofType( File.class )
-                    .withValuesSeparatedBy( pathSeparatorChar );
+                    .withValuesSeparatedBy( File.pathSeparatorChar );
                 nonOptions( "files to chew on" ).ofType( File.class ).describedAs( "input files" );
             }
         };

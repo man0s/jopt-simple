@@ -23,7 +23,7 @@
  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-package joptsimple.util;
+package joptsimple.converter;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -38,13 +38,17 @@ import joptsimple.internal.Messages;
  *
  * @author <a href="mailto:r@ymund.de">Raymund F\u00FCl\u00F6p</a>
  */
-public class InetAddressConverter implements ValueConverter<InetAddress> {
+public final class InetAddressConverter implements ValueConverter<InetAddress> {
+    private static final InetAddressConverter INSTANCE = new InetAddressConverter();
+
+    private InetAddressConverter() {
+    }
+
     @Override
     public InetAddress convert( String value ) {
         try {
             return InetAddress.getByName( value );
-        }
-        catch ( UnknownHostException e ) {
+        } catch ( UnknownHostException e ) {
             throw new ValueConversionException( message( value ) );
         }
     }
@@ -71,5 +75,9 @@ public class InetAddressConverter implements ValueConverter<InetAddress> {
             InetAddressConverter.class,
             "message",
             value );
+    }
+
+    public static InetAddressConverter of() {
+        return INSTANCE;
     }
 }

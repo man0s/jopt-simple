@@ -21,7 +21,7 @@
                         <configuration>
                             <!-- compile everything to ensure module-info contains right entries -->
                             <!-- required when JAVA_HOME is JDK 8 or below -->
-                            <release>11</release>
+                            <release>17</release>
                         </configuration>
                     </execution>
                     <execution>

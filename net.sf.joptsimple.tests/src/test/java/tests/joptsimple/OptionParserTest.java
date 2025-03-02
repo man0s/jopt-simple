@@ -25,21 +25,22 @@
 
 package tests.joptsimple;
 
+import static java.lang.Boolean.FALSE;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Optional;
 
-import static java.lang.Boolean.*;
-import static java.util.Arrays.*;
-import static java.util.Collections.*;
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import org.hamcrest.Description;
-import org.hamcrest.TypeSafeMatcher;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
@@ -103,10 +104,9 @@ public class OptionParserTest extends AbstractOptionParserFixture {
     public void longOptionLeadsWithSingleDashAmbiguous() {
         parser.accepts( "quiet" );
         parser.accepts( "queen" );
-        thrown.expect( OptionException.class );
-        thrown.expect( ExceptionMatchers.withOption( "q" ) );
-
-        parser.parse( "-q" );
+        
+        var exception = assertThrows( OptionException.class, () -> parser.parse( "-q" ) );
+        assertTrue( exception.options().contains( "q" ) );
     }
 
     @Test
@@ -131,10 +131,9 @@ public class OptionParserTest extends AbstractOptionParserFixture {
         parser.accepts( "quiet" );
         parser.accepts( "queen" );
         parser.accepts( "q" );
-        thrown.expect( OptionException.class );
-        thrown.expect( ExceptionMatchers.withOption( "u" ) );
 
-        parser.parse( "-qu" );
+        var exception = assertThrows( OptionException.class, () -> parser.parse( "-qu" ) );
+        assertTrue( exception.options().contains( "u" ) );
     }
 
     @Test
@@ -275,10 +274,9 @@ public class OptionParserTest extends AbstractOptionParserFixture {
     @Test
     public void requiredOptionWithArgMissing() {
         parser.accepts( "t" ).withOptionalArg().required();
-        thrown.expect( OptionException.class );
-        thrown.expect( ExceptionMatchers.withOption( "t" ) );
 
-        parser.parse();
+        var exception = assertThrows( OptionException.class, parser::parse );
+        assertTrue( exception.options().contains( "t" ) );
     }
 
     @Test
@@ -302,20 +300,9 @@ public class OptionParserTest extends AbstractOptionParserFixture {
         parser.acceptsAll( asList( "h", "help", "?" ) );
         parser.acceptsAll( asList( "f", "ff", "csv-file-name" ) ).withRequiredArg().required();
 
-        thrown.expect( OptionException.class );
-        thrown.expectMessage( new TypeSafeMatcher<String>() {
-            @Override
-            protected boolean matchesSafely( String item ) {
-                return "Missing required option(s) [f/csv-file-name/ff]".equals( item );
-            }
 
-            @Override
-            public void describeTo( Description description ) {
-                // purposely doing nothing here
-            }
-        } );
-
-        parser.parse();
+        var exception = assertThrows( OptionException.class, parser::parse );
+        assertTrue( exception.getMessage().equals( "Missing required option(s) [f/csv-file-name/ff]" ) );
     }
 
     @Test
@@ -323,8 +310,6 @@ public class OptionParserTest extends AbstractOptionParserFixture {
         OptionParser parser = new OptionParser(false);
         parser.accepts( "abbreviatable" );
 
-        thrown.expect( OptionException.class );
-
-        parser.parse( "--abb" );
+        assertThrows( OptionException.class, () -> parser.parse( "--abb" ) );
     }
 }

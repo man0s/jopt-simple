@@ -25,42 +25,44 @@
 
 package tests.joptsimple;
 
-import joptsimple.AbstractOptionSpec;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
+
 import joptsimple.OptionSpec;
-import joptsimple.OptionSpecBuilder;
-import org.infinitest.toolkit.EqualsHashCodeTestSupport;
-import org.junit.Test;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-public abstract class AbstractOptionSpecFixture<S extends OptionSpec<?>> extends EqualsHashCodeTestSupport {
-    @Override
-    protected S equal() {
-        return createEqualOptionSpecInstance();
+public abstract class AbstractOptionSpecFixture<S extends OptionSpec<?>> {
+    @Test
+    public void equal() {
+        assertEquals( createEqualOptionSpecInstance(), createEqualOptionSpecInstance() );
     }
 
-    @Override
-    protected S notEqual() {
-        return createNotEqualOptionSpecInstance();
+    @Test
+    public void notEqual() {
+        assertNotEquals( createEqualOptionSpecInstance(), createNotEqualOptionSpecInstance() );
     }
 
     protected abstract S createEqualOptionSpecInstance();
 
     protected abstract S createNotEqualOptionSpecInstance();
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public final void valuesWithNullOptionSet() {
-        createEqualOptionSpecInstance().values( null );
+        assertThrows( NullPointerException.class, () -> createEqualOptionSpecInstance().values( null ) );
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public final void valueWithNullOptionSet() {
-        createNotEqualOptionSpecInstance().value( null );
+        assertThrows( NullPointerException.class, () -> createNotEqualOptionSpecInstance().value( null ) );
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public final void valueOptionalWithNullOptionSet() {
-        createNotEqualOptionSpecInstance().valueOptional( null );
+        assertThrows( NullPointerException.class, () -> createNotEqualOptionSpecInstance().valueOptional( null ) );
     }
 }

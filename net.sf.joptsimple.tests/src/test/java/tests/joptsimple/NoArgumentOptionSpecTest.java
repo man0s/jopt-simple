@@ -25,18 +25,19 @@
 
 package tests.joptsimple;
 
-import joptsimple.OptionParser;
-import joptsimple.OptionSpecBuilder;
-import org.junit.Test;
-
 import static java.util.Collections.singletonList;
-import static org.infinitest.toolkit.CollectionMatchers.hasSameContentsAs;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
+import joptsimple.OptionParser;
+import joptsimple.OptionSpec;
+import joptsimple.OptionSpecBuilder;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-public class NoArgumentOptionSpecTest extends AbstractOptionSpecFixture {
+public class NoArgumentOptionSpecTest extends AbstractOptionSpecFixture<OptionSpec<?>> {
     @Override
     protected OptionSpecBuilder createEqualOptionSpecInstance() {
         OptionParser parser = new OptionParser();
@@ -51,6 +52,6 @@ public class NoArgumentOptionSpecTest extends AbstractOptionSpecFixture {
 
     @Test
     public void optionsContents() {
-        assertThat( createNotEqualOptionSpecInstance().options(), hasSameContentsAs( singletonList( "b" ) ) );
+        assertEquals( createNotEqualOptionSpecInstance().options(), singletonList( "b" ) );
     }
 }

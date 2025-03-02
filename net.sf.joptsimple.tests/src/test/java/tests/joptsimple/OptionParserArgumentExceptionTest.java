@@ -25,57 +25,60 @@
 
 package tests.joptsimple;
 
-import static java.util.Collections.*;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionParser;
-import org.junit.Test;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
 public class OptionParserArgumentExceptionTest extends AbstractOptionParserFixture {
-    @Test( expected = NullPointerException.class )
+    @Test
     public void createWithNullOptionSpec() {
-        new OptionParser( null );
+        assertThrows( NullPointerException.class, () -> new OptionParser( null ) );
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void parseNull() {
-        parser.parse( (String[]) null );
+        assertThrows( NullPointerException.class, () -> parser.parse( (String[]) null ) );
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void nullOptionToAccepts() {
-        parser.accepts( null );
+        assertThrows( NullPointerException.class, () -> parser.accepts( null ) );
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void nullOptionToAcceptsWithDescription() {
-        parser.accepts( null, "a weird option" );
+        assertThrows( NullPointerException.class, () -> parser.accepts( null, "a weird option" ) );
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void nullOptionListToAcceptsAll() {
-        parser.acceptsAll( null );
+        assertThrows( NullPointerException.class, () -> parser.acceptsAll( null ) );
     }
 
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void emptyOptionListToAcceptsAll() {
-        parser.acceptsAll( emptyList() );
+        assertThrows( IllegalArgumentException.class, () -> parser.acceptsAll( emptyList() ) );
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void optionListContainingNullToAcceptsAll() {
-        parser.acceptsAll( singletonList( null ) );
+        assertThrows( NullPointerException.class, () -> parser.acceptsAll( singletonList( null ) ) );
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void nullOptionListToAcceptsAllWithDescription() {
-        parser.acceptsAll( null, "some weird options" );
+        assertThrows( NullPointerException.class, () -> parser.acceptsAll( null, "some weird options" ) );
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void optionListContainingNullToAcceptsAllWithDescription() {
-        parser.acceptsAll( singletonList( null ), "some weird options" );
+        assertThrows( NullPointerException.class, () -> parser.acceptsAll( singletonList( null ), "some weird options" ) );
     }
 }

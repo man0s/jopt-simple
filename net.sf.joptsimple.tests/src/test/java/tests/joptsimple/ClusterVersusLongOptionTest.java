@@ -25,17 +25,19 @@
 
 package tests.joptsimple;
 
-import joptsimple.OptionSet;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import joptsimple.OptionSet;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
 public class ClusterVersusLongOptionTest extends AbstractOptionParserFixture {
-    @Before
+    @BeforeEach
     public final void initializeParser() {
         parser.accepts( "fox" );
         parser.accepts( "f" );

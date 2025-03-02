@@ -25,15 +25,17 @@
 
 package tests.joptsimple.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+
 import java.net.InetAddress;
 
-import joptsimple.ValueConversionException;
-import joptsimple.util.InetAddressConverter;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
-import static org.junit.Assume.*;
+import joptsimple.ValueConversionException;
+import joptsimple.converter.InetAddressConverter;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
@@ -41,9 +43,9 @@ import static org.junit.Assume.*;
 public class InetAddressConverterTest {
     private InetAddressConverter converter;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        converter = new InetAddressConverter();
+        converter = InetAddressConverter.of();
     }
 
     @Test
@@ -53,8 +55,8 @@ public class InetAddressConverterTest {
         assertEquals( "127.0.0.1", converter.convert( "localhost" ).getHostAddress() );
     }
 
-    @Test( expected = ValueConversionException.class )
+    @Test
     public void unknownHost() {
-        converter.convert( "!(@&#()!*@&#" );
+        assertThrows( ValueConversionException.class, () -> converter.convert( "!(@&#()!*@&#" ) );
     }
 }

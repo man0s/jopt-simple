@@ -23,22 +23,40 @@
  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-package tests.joptsimple.util;
+package joptsimple;
 
-import joptsimple.util.KeyValuePair;
-import org.infinitest.toolkit.EqualsHashCodeTestSupport;
+import static joptsimple.internal.Strings.*;
 
 /**
+ * <p>A simple string key/string value pair.</p>
+ *
+ * <p>This is useful as an argument type for options whose values take on the form {@code key=value}, such as JVM
+ * command line system properties.</p>
+ *
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-public class KeyValuePairUnequalValuesTest extends EqualsHashCodeTestSupport {
-    @Override
-    protected KeyValuePair equal() {
-        return KeyValuePair.valueOf( "x=y" );
+public record KeyValuePair(String key, String value) {
+
+    /**
+     * Parses a string assumed to be of the form {@code key=value} into its parts.
+     *
+     * @param asString key-value string
+     * @return a key-value pair
+     * @throws NullPointerException if {@code asString} is {@code null}
+     */
+    public static KeyValuePair valueOf( String asString ) {
+        int equalsIndex = asString.indexOf( '=' );
+        if ( equalsIndex == -1 )
+            return new KeyValuePair( asString, null );
+
+        String aKey = asString.substring( 0, equalsIndex );
+        String aValue = equalsIndex == asString.length() - 1 ? EMPTY : asString.substring( equalsIndex + 1 );
+
+        return new KeyValuePair( aKey, aValue );
     }
 
     @Override
-    protected KeyValuePair notEqual() {
-        return KeyValuePair.valueOf( "x=z" );
+    public String toString() {
+        return key + '=' + value;
     }
 }

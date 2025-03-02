@@ -25,29 +25,25 @@
 
 package tests.joptsimple.util;
 
-import joptsimple.ValueConversionException;
-import joptsimple.util.EnumConverter;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.junit.rules.ExpectedException.none;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import joptsimple.ValueConversionException;
+import joptsimple.converter.EnumConverter;
 
 /**
  * @author <a href="mailto:christian.ohr@gmail.com">Christian Ohr</a>
  */
 public class EnumConverterTest {
-    @Rule
-    public final ExpectedException thrown = none();
-
     private EnumConverter<TestEnum> converter;
 
-    @Before
+    @BeforeEach
     public void setUp() {
-        converter = new TestEnumConverter();
+        converter = EnumConverter.of(TestEnum.class);
     }
 
     @Test
@@ -57,9 +53,7 @@ public class EnumConverterTest {
 
     @Test
     public void rejectsNonEnumeratedValues() {
-        thrown.expect( ValueConversionException.class );
-
-        converter.convert( "Z" );
+        assertThrows( ValueConversionException.class, () -> converter.convert( "Z" ) );
     }
 
     @Test
@@ -82,12 +76,6 @@ public class EnumConverterTest {
     @Test
     public void ignoresCase() {
         assertEquals( TestEnum.A, converter.convert( "a" ) );
-    }
-
-    private static class TestEnumConverter extends EnumConverter<TestEnum> {
-        TestEnumConverter() {
-            super( TestEnum.class );
-        }
     }
 
     private static enum TestEnum {

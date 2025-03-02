@@ -1,13 +1,15 @@
 package tests.joptsimple.examples;
 
-import static java.util.Arrays.*;
-import static java.util.Collections.*;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class SignallingEndOfOptionsTest {
     @Test

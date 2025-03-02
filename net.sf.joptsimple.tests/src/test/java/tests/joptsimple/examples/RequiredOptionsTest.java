@@ -1,14 +1,16 @@
 package tests.joptsimple.examples;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class RequiredOptionsTest {
-    @Test( expected = OptionException.class )
+    @Test
     public void allowsSpecificationOfRequiredOptions() {
         OptionParser parser = new OptionParser() {
             {
@@ -17,7 +19,7 @@ public class RequiredOptionsTest {
             }
         };
 
-        parser.parse( "--userid", "bob" );
+        assertThrows( OptionException.class, () -> parser.parse( "--userid", "bob" ) );
     }
 
     @Test
@@ -33,8 +35,8 @@ public class RequiredOptionsTest {
         OptionSet options = parser.parse( "--help" );
         assertTrue( options.has( "help" ) );
     }
-    
-    @Test( expected = OptionException.class )
+
+    @Test
     public void missingHelpOptionMeansRequiredOptionsMustBePresent() {
         OptionParser parser = new OptionParser() {
             {
@@ -44,6 +46,6 @@ public class RequiredOptionsTest {
             }
         };
 
-        parser.parse( "" );
+        assertThrows( OptionException.class, () -> parser.parse( "" ) );
     }
 }

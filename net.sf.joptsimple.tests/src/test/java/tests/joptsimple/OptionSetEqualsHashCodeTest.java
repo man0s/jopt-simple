@@ -25,25 +25,36 @@
 
 package tests.joptsimple;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+import org.junit.jupiter.api.Test;
+
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import org.infinitest.toolkit.EqualsHashCodeTestSupport;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-public class OptionSetEqualsHashCodeTest extends EqualsHashCodeTestSupport {
-    @Override
-    protected OptionSet equal() {
+public class OptionSetEqualsHashCodeTest {
+    @Test
+    public void equal() {
+        OptionParser parser = new OptionParser();
+        parser.accepts( "anOption" ).withRequiredArg();
+        assertEquals( generateEqual(), generateEqual() );
+    }
+
+    private static OptionSet generateEqual() {
         OptionParser parser = new OptionParser();
         parser.accepts( "anOption" ).withRequiredArg();
         return parser.parse( "--anOption", "anArg" );
     }
 
-    @Override
-    protected OptionSet notEqual() {
+    @Test
+    public void notEqual() {
         OptionParser parser = new OptionParser();
         parser.accepts( "anOption" ).withRequiredArg();
-        return parser.parse( "--anOption", "aDifferentArg" );
+        var notEqual = parser.parse( "--anOption", "aDifferentArg" );
+        assertNotEquals( notEqual, generateEqual() );
     }
 }

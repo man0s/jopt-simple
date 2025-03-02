@@ -25,20 +25,22 @@
 
 package tests.joptsimple;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
 public class PunctuationInShortOptionTest {
-    @Test( expected = OptionException.class )
+    @Test
     public void disallowsHyphenAsShortOption() {
-        new OptionParser( "-" );
+        assertThrows( OptionException.class, () -> new OptionParser( "-" ) );
     }
 
     @Test

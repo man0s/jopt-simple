@@ -25,9 +25,13 @@
 
 package tests.joptsimple;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import joptsimple.OptionException;
 import joptsimple.OptionSet;
-import org.junit.Test;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
@@ -35,54 +39,45 @@ import org.junit.Test;
 public class OptionParserOptionExceptionTest extends AbstractOptionParserFixture {
     @Test
     public void unrecognizedOption() {
-        thrown.expect( OptionException.class );
-        thrown.expect( ExceptionMatchers.withOption( "a" ) );
-
-        parser.parse( "-a" );
+        var exception = assertThrows( OptionException.class, () -> parser.parse( "-a" ) );
+        assertTrue( exception.options().contains( "a" ) );
     }
 
     @Test
     public void illegalOptionCharacter() {
-        thrown.expect( OptionException.class );
-        thrown.expect( ExceptionMatchers.withOption( "%" ) );
-
-        parser.accepts( "%" );
+        var exception = assertThrows( OptionException.class, () -> parser.accepts( "%" ) );
+        assertTrue( exception.options().contains( "%" ) );
     }
 
     @Test
     public void asteriskIsIllegalOptionCharacter() {
-        thrown.expect( OptionException.class );
-        thrown.expect( ExceptionMatchers.withOption( "*" ) );
-
-        parser.accepts( "*" );
+        var exception = assertThrows( OptionException.class, () -> parser.accepts( "*" ) );
+        assertTrue( exception.options().contains( "*" ) );
     }
 
     @Test
     public void tooManyHyphens() {
         parser.accepts( "b" );
-        thrown.expect( OptionException.class );
-        thrown.expect( ExceptionMatchers.withOption( "-b" ) );
 
-        parser.parse( "---b" );
+        var exception = assertThrows( OptionException.class, () -> parser.parse( "---b" ) );
+        assertTrue( exception.options().contains( "-b" ) );
     }
 
     @Test
     public void valueOfWhenMultiples() {
         parser.accepts( "e" ).withRequiredArg();
         OptionSet options = parser.parse( "-e", "foo", "-e", "bar" );
-        thrown.expect( OptionException.class );
-        thrown.expect( ExceptionMatchers.withOption( "e" ) );
 
-        options.valueOf( "e" );
+        var exception = assertThrows( OptionException.class, () -> options.valueOf( "e" ) );
+        assertTrue( exception.options().contains( "e" ) );
     }
 
     @Test
     public void valueOfOptionalWhenMultiples() {
         parser.accepts( "e" ).withRequiredArg();
         OptionSet options = parser.parse( "-e", "foo", "-e", "bar" );
-        thrown.expect( OptionException.class );
-        thrown.expect( ExceptionMatchers.withOption( "e" ) );
 
-        options.valueOfOptional( "e" );
+        var exception = assertThrows( OptionException.class, () -> options.valueOfOptional( "e" ) );
+        assertTrue( exception.options().contains( "e" ) );
     }
 }

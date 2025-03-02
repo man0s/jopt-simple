@@ -25,42 +25,24 @@
 
 package tests.joptsimple;
 
-import joptsimple.OptionParser;
-import org.junit.Ignore;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+import org.junit.jupiter.api.Test;
+
+import joptsimple.KeyValuePair;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-@Ignore("there will be no values associated with a no-arg option")
-public class NoArgumentOptionSpecValuesImmutabilityTest extends AbstractOptionSpecValuesImmutabilityTestCase<Void> {
-    @Override
-    protected OptionParser trainedParser() {
-        OptionParser parser = new OptionParser();
-        parser.accepts( option() );
-        return parser;
+public class KeyValuePairUnequalKeysTest {
+    @Test
+    public void equal() {
+        assertEquals( KeyValuePair.valueOf( "x=z" ), KeyValuePair.valueOf( "x=z" ) );
     }
 
-    @Override protected String option() {
-        return "verbose";
-    }
-
-    @Override
-    protected String firstArg() {
-        return "1";
-    }
-
-    @Override
-    protected String secondArg() {
-        return "2";
-    }
-
-    @Override
-    protected Void newItem() {
-        return null;
-    }
-
-    @Override
-    protected Void containedItem() {
-        return null;
+    @Test
+    public void notEqual() {
+        assertNotEquals( KeyValuePair.valueOf( "x=z" ), KeyValuePair.valueOf( "y=z" ) );
     }
 }

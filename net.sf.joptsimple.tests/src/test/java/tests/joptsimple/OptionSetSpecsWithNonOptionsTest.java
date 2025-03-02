@@ -25,16 +25,17 @@
 
 package tests.joptsimple;
 
+import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 import joptsimple.NonOptionArgumentSpec;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import org.junit.Test;
-
-import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.assertEquals;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
