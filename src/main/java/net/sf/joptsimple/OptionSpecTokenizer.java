@@ -84,7 +84,7 @@ final class OptionSpecTokenizer {
         return spec;
     }
 
-    final void configure( OptionParser parser ) {
+    void configure( OptionParser parser ) {
         adjustForPosixlyCorrect( parser );
 
         while ( hasMore() )
