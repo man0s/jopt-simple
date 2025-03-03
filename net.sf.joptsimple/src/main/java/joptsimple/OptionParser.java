@@ -244,10 +244,6 @@ public class OptionParser implements OptionDeclarer {
      */
     public OptionParser( String optionSpecification ) {
         this();
-        configureOptionSpecTokenizer(optionSpecification);
-    }
-
-    private void configureOptionSpecTokenizer(String optionSpecification) {
         new OptionSpecTokenizer(optionSpecification).configure(this);
     }
 
@@ -321,7 +317,7 @@ public class OptionParser implements OptionDeclarer {
             recognizedOptions.remove( RESERVED_FOR_EXTENSIONS );
     }
 
-    void recognize( AbstractOptionSpec<?> spec ) {
+    final void recognize( AbstractOptionSpec<?> spec ) {
         recognizedOptions.putAll( spec.options(), spec );
         trainingOrder.add( spec );
     }

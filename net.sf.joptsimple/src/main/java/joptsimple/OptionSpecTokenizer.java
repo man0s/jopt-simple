@@ -35,7 +35,7 @@ import static joptsimple.ParserRules.*;
  *
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-class OptionSpecTokenizer {
+final class OptionSpecTokenizer {
     private static final char POSIXLY_CORRECT_MARKER = '+';
     private static final char HELP_MARKER = '*';
 

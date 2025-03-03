@@ -63,10 +63,6 @@ public class OptionSpecBuilder extends NoArgumentOptionSpec {
         super( options, description );
 
         this.parser = parser;
-        attachToParser();
-    }
-
-    private void attachToParser() {
         parser.recognize( this );
     }
 
