@@ -28,9 +28,6 @@ package net.sf.joptsimple;
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
 import java.io.StringWriter;
 
 import org.junit.jupiter.api.Test;

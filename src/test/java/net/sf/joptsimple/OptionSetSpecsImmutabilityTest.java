@@ -23,7 +23,6 @@
  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-<<<<<<<< HEAD:src/test/java/net/sf/joptsimple/OptionSetSpecsImmutabilityTest.java
 package net.sf.joptsimple;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -32,22 +31,9 @@ import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
-import net.sf.joptsimple.OptionParser;
-========
-package tests.joptsimple;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
-import org.junit.jupiter.api.Test;
-
-import joptsimple.KeyValuePair;
->>>>>>>> upstream/master:src/test/java/net/sf/joptsimple/KeyValuePairUnequalKeysTest.java
-
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-<<<<<<<< HEAD:src/test/java/net/sf/joptsimple/OptionSetSpecsImmutabilityTest.java
 public class OptionSetSpecsImmutabilityTest {
     @Test
     public void listIsUnmodifiable() {
@@ -55,16 +41,5 @@ public class OptionSetSpecsImmutabilityTest {
         parser.accepts( "a" );
         var list = parser.parse( "-a" ).specs();
         assertTrue( list == Collections.unmodifiableList( list ) );
-========
-public class KeyValuePairUnequalKeysTest {
-    @Test
-    public void equal() {
-        assertEquals( KeyValuePair.valueOf( "x=z" ), KeyValuePair.valueOf( "x=z" ) );
-    }
-
-    @Test
-    public void notEqual() {
-        assertNotEquals( KeyValuePair.valueOf( "x=z" ), KeyValuePair.valueOf( "y=z" ) );
->>>>>>>> upstream/master:src/test/java/net/sf/joptsimple/KeyValuePairUnequalKeysTest.java
     }
 }
