@@ -1,6 +1,7 @@
 *~
 .*~
-build
+/build/
+/bin/
 *.iml
 *.ipr
 *.iws
@@ -11,3 +12,4 @@ target
 .settings
 .checkstyle
 .idea
+/.gradle/
