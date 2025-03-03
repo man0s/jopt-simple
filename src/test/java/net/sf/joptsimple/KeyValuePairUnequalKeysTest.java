@@ -23,26 +23,46 @@
  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+<<<<<<<< HEAD:src/test/java/net/sf/joptsimple/KeyValuePairUnequalKeysTest.java
 package net.sf.joptsimple;
+========
+package tests.joptsimple;
+>>>>>>>> upstream/master:src/test/java/net/sf/joptsimple/KeyValuePairUnequalValuesTest.java
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
 
+<<<<<<<< HEAD:src/test/java/net/sf/joptsimple/KeyValuePairUnequalKeysTest.java
 import net.sf.joptsimple.KeyValuePair;
+========
+import joptsimple.KeyValuePair;
+>>>>>>>> upstream/master:src/test/java/net/sf/joptsimple/KeyValuePairUnequalValuesTest.java
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
+<<<<<<<< HEAD:src/test/java/net/sf/joptsimple/KeyValuePairUnequalKeysTest.java
 public class KeyValuePairUnequalKeysTest {
     @Test
     public void equal() {
         assertEquals( KeyValuePair.valueOf( "x=z" ), KeyValuePair.valueOf( "x=z" ) );
+========
+public class KeyValuePairUnequalValuesTest {
+
+    @Test
+    public void equal() {
+        assertEquals( KeyValuePair.valueOf( "x=y" ), KeyValuePair.valueOf( "x=y" ) );
+>>>>>>>> upstream/master:src/test/java/net/sf/joptsimple/KeyValuePairUnequalValuesTest.java
     }
 
     @Test
     public void notEqual() {
+<<<<<<<< HEAD:src/test/java/net/sf/joptsimple/KeyValuePairUnequalKeysTest.java
         assertNotEquals( KeyValuePair.valueOf( "x=z" ), KeyValuePair.valueOf( "y=z" ) );
+========
+        assertNotEquals( KeyValuePair.valueOf( "x=y" ), KeyValuePair.valueOf( "x=z" ) );
+>>>>>>>> upstream/master:src/test/java/net/sf/joptsimple/KeyValuePairUnequalValuesTest.java
     }
 }
