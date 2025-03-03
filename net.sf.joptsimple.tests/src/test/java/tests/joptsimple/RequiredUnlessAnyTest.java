@@ -25,16 +25,17 @@
 
 package tests.joptsimple;
 
+import static java.util.Collections.emptyList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import org.junit.Before;
-import org.junit.Test;
-
-import static java.util.Collections.emptyList;
-import static org.junit.Assert.assertEquals;
 
 public class RequiredUnlessAnyTest extends AbstractOptionParserFixture {
-    @Before
+    @BeforeEach
     public void configureParser() {
         parser.accepts( "a" );
         parser.accepts( "b" );

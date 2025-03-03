@@ -25,20 +25,23 @@
 
 package tests.joptsimple;
 
+import static java.math.BigDecimal.TEN;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import static java.math.BigDecimal.TEN;
-import static java.util.Arrays.asList;
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionException;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import org.junit.Test;
-
-import static java.util.Collections.singletonList;
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
@@ -67,11 +70,11 @@ public class HandlingDefaultValuesForOptionArgumentsTest extends AbstractOptionP
         assertEquals( singletonList( expectedArgument ), optionA.values( options ) );
     }
 
-    @Test( expected = OptionException.class )
+    @Test
     public void requiredArgOptionWithDefaultStillsFailToParseIfArgNotSpecifiedOnCommandLine() {
         parser.accepts( "a" ).withRequiredArg().defaultsTo( "boo" );
 
-        parser.parse( "-a" );
+        assertThrows( OptionException.class, () -> parser.parse( "-a" ) );
     }
 
     @Test

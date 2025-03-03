@@ -1,19 +1,17 @@
 package tests.joptsimple.examples;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.asList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
-import static org.junit.Assert.*;
-import static org.junit.rules.ExpectedException.*;
 
 public class ShortOptionsWithMultipleArgumentsForSingleOptionTest {
-    @Rule public final ExpectedException thrown = none();
 
     @Test
     public void allowsMultipleValuesForAnOption() {
@@ -25,7 +23,7 @@ public class ShortOptionsWithMultipleArgumentsForSingleOptionTest {
         assertTrue( options.hasArgument( "a" ) );
         assertEquals( asList( "foo", "bar", "baz" ), options.valuesOf( "a" ) );
 
-        thrown.expect( OptionException.class );
-        options.valueOf( "a" );
+        assertThrows( OptionException.class, () -> options.valueOf( "a" ) );
+
     }
 }

@@ -27,10 +27,10 @@ package joptsimple;
 
 import java.util.*;
 
+import joptsimple.converter.DateTimeConverter;
 import joptsimple.internal.Messages;
 import joptsimple.internal.Rows;
 import joptsimple.internal.Strings;
-import joptsimple.util.DateConverter;
 
 import static java.util.stream.Collectors.*;
 
@@ -463,7 +463,7 @@ public class BuiltinHelpFormatter implements HelpFormatter {
         Optional<ValueConverter<?>> valueConverterOptional = descriptor.argumentConverter();
         if ( valueConverterOptional.isPresent() ) {
             ValueConverter<?> valueConverter = valueConverterOptional.get();
-            if ( DateConverter.class.isInstance( valueConverter ) ) {
+            if ( DateTimeConverter.class.isInstance( valueConverter ) ) {
                 isDateOption = true;
             }
         }

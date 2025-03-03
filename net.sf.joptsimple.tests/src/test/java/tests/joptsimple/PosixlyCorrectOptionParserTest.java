@@ -25,52 +25,48 @@
 
 package tests.joptsimple;
 
-import java.util.Collection;
+import static java.util.Arrays.asList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static java.util.Arrays.*;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-@RunWith( Parameterized.class )
 public class PosixlyCorrectOptionParserTest {
-    private final OptionParser parser;
 
-    public PosixlyCorrectOptionParserTest( OptionParser parser ) {
-        this.parser = parser;
-    }
-
-    @Parameterized.Parameters
-    public static Collection<?> parsers() {
-        return asList( new Object[] {
+    private static Stream<OptionParser> parseWithPosixlyCorrect() {
+        return Stream.of(
             new OptionParser() { {
                 posixlyCorrect( true );
                 accepts( "i" ).withRequiredArg();
                 accepts( "j" ).withOptionalArg();
                 accepts( "k" );
-            } } },
-            new Object[] { new OptionParser( "+i:j::k" ) } );
+            } },
+            new OptionParser( "+i:j::k" ) );
     }
 
-    @Test
-    public void parseWithPosixlyCorrect() {
+    @ParameterizedTest
+    @MethodSource
+    public void parseWithPosixlyCorrect(OptionParser parser) {
         OptionSet options =
             parser.parse( "-ibar", "-i", "junk", "xyz", "-jixnay", "foo", "-k", "blah", "--", "yermom" );
 
-        assertTrue( "i?", options.has( "i" ) );
-        assertFalse( "j?", options.has( "j" ) );
-        assertFalse( "k?", options.has( "k" ) );
-        assertEquals( "args of i?", asList( "bar", "junk" ), options.valuesOf( "i" ) );
-        assertEquals( "non-option args?",
+        assertTrue( options.has( "i" ), "i?" );
+        assertFalse( options.has( "j" ), "j?" );
+        assertFalse( options.has( "k" ), "k?" );
+        assertEquals( asList( "bar", "junk" ), options.valuesOf( "i" ), "args of i?" );
+        assertEquals(
             asList( "xyz", "-jixnay", "foo", "-k", "blah", "--", "yermom" ),
-            options.nonOptionArguments() );
+            options.nonOptionArguments(),
+            "non-option args?" );
     }
 }

@@ -1,23 +1,23 @@
 package tests.joptsimple;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Date;
 import java.util.Map;
+
+import org.junit.jupiter.api.Test;
 
 import joptsimple.AbstractOptionSpec;
 import joptsimple.BuiltinHelpFormatter;
 import joptsimple.OptionParser;
-import org.junit.Test;
-
-import joptsimple.util.DateConverter;
+import joptsimple.converter.DateTimeConverter;
 
 public class BuiltinHelpFormatterTest {
-    @Test //for issue #127
+    @Test // for issue #127
     public void gh127FormatHelpWithDateOptionAndPatternThatContainsDots() {
         OptionParser parser = new OptionParser();
-        parser.accepts( "date" ).withRequiredArg().ofType( Date.class )
-            .withValuesConvertedBy( DateConverter.datePattern( "dd.MM.yyyy" ) );
+        parser.accepts( "date" )
+            .withRequiredArg()
+            .withValuesConvertedBy( DateTimeConverter.of( "MM/dd/yy" ) );
 
         Map<String, AbstractOptionSpec<?>> specs = parser.recognizedOptions();
 
@@ -25,11 +25,13 @@ public class BuiltinHelpFormatterTest {
 
         String actual = builtinHelpFormatter.format( specs );
 
-        String expected =
-            "Option               Description\n" +
-                "------               -----------\n" +
-                "--date <dd.MM.yyyy>             \n";
+        var expected =
+            """
+            Option             Description|
+            ------             -----------|
+            --date <MM/dd/yy>             |
+            """;
 
-        assertEquals( expected, actual );
+        assertEquals( expected.replace( "|\n", "\n" ).replace( "\n", Strings.LINE_SEPARATOR ), actual );
     }
 }

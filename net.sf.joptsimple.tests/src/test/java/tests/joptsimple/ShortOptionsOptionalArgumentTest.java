@@ -25,21 +25,24 @@
 
 package tests.joptsimple;
 
-import static java.util.Arrays.*;
-import static java.util.Collections.*;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionException;
 import joptsimple.OptionSet;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
 public class ShortOptionsOptionalArgumentTest extends AbstractOptionParserFixture {
-    @Before
+    @BeforeEach
     public final void initializeParser() {
         parser.accepts( "f" ).withOptionalArg();
         parser.accepts( "g" ).withOptionalArg();
@@ -66,10 +69,8 @@ public class ShortOptionsOptionalArgumentTest extends AbstractOptionParserFixtur
 
     @Test
     public void optionWithOptionalArgumentThatLooksLikeAnInvalidOption() {
-        thrown.expect( OptionException.class );
-        thrown.expect( ExceptionMatchers.withOption( "biz" ) );
-
-        parser.parse( "-f", "--biz" );
+        var exception = assertThrows( OptionException.class, () -> parser.parse( "-f", "--biz" ) );
+        assertTrue( exception.options().contains( "biz" ) );
     }
 
     @Test

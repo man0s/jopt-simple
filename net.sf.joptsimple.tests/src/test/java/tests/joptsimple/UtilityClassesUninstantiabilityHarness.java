@@ -25,20 +25,18 @@
 
 package tests.joptsimple;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
-import static org.junit.rules.ExpectedException.*;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
 public abstract class UtilityClassesUninstantiabilityHarness {
-    @Rule public final ExpectedException thrown = none();
 
     private final Class<?> utility;
 
@@ -51,9 +49,7 @@ public abstract class UtilityClassesUninstantiabilityHarness {
         Constructor<?> constructor = utility.getDeclaredConstructor();
         constructor.setAccessible( true );
 
-        thrown.expect( InvocationTargetException.class );
-        thrown.expect( ExceptionMatchers.withTargetOfType( UnsupportedOperationException.class ) );
-
-        constructor.newInstance();
+        var exception = assertThrows( InvocationTargetException.class, constructor::newInstance);
+        assertTrue( exception.getCause() instanceof UnsupportedOperationException );
     }
 }

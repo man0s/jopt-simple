@@ -1,26 +1,26 @@
 package tests.joptsimple;
 
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import java.io.StringWriter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import static java.util.Collections.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import joptsimple.HelpFormatter;
 import joptsimple.OptionDescriptor;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.infinitest.toolkit.CollectionMatchers.*;
-import static org.junit.Assert.*;
 
 public class OptionParserAlternateHelpFormatterTest extends AbstractOptionParserFixture {
     private StringWriter sink;
     private Map<String, ? extends OptionDescriptor> captured;
 
-    @Before
+    @BeforeEach
     public void primeParser() throws Exception {
         captured = new HashMap<>();
 
@@ -52,7 +52,7 @@ public class OptionParserAlternateHelpFormatterTest extends AbstractOptionParser
         Map.Entry<String, ? extends OptionDescriptor> second = iterator.next();
         assertEquals("b", second.getKey());
         OptionDescriptor descriptor = second.getValue();
-        assertThat( descriptor.options(), hasSameContentsAs( singletonList( "b" ) ) );
+        assertEquals( descriptor.options(), singletonList( "b" ) );
         assertEquals( "boo", descriptor.description() );
         assertFalse( descriptor.acceptsArguments() );
         assertFalse( descriptor.requiresArgument() );

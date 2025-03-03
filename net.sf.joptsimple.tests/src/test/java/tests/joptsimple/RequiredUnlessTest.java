@@ -25,19 +25,21 @@
 
 package tests.joptsimple;
 
-import joptsimple.OptionException;
-import joptsimple.OptionSet;
-import joptsimple.OptionSpec;
-import org.junit.Before;
-import org.junit.Test;
-
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import joptsimple.OptionException;
+import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
 
 public class RequiredUnlessTest extends AbstractOptionParserFixture {
-    @Before
+    @BeforeEach
     public void configureParser() {
         OptionSpec<Void> anonymous = parser.accepts( "anonymous" );
         parser.acceptsAll( asList( "username", "userid" ) ).requiredUnless( "anonymous" ).withRequiredArg();
@@ -47,16 +49,12 @@ public class RequiredUnlessTest extends AbstractOptionParserFixture {
 
     @Test
     public void rejectsCommandLineMissingConditionallyRequiredOption() {
-        thrown.expect( OptionException.class );
-
-        parser.parse( "" );
+        assertThrows( OptionException.class, () -> parser.parse( "" ) );
     }
 
     @Test
     public void rejectsCommandLineWithNotAllConditionallyRequiredOptionsPresent() {
-        thrown.expect( OptionException.class );
-
-        parser.parse( "--username", "joe" );
+        assertThrows( OptionException.class, () -> parser.parse( "--username", "joe" ) );
     }
 
     @Test
@@ -91,16 +89,12 @@ public class RequiredUnlessTest extends AbstractOptionParserFixture {
 
     @Test
     public void rejectsOptionNotAlreadyConfigured() {
-        thrown.expect( OptionException.class );
-
-        parser.accepts( "foo" ).requiredIf( "bar" );
+        assertThrows( OptionException.class, () -> parser.accepts( "foo" ).requiredIf( "bar" ) );
     }
 
     @Test
     public void rejectsOptionSpecNotAlreadyConfigured() {
-        thrown.expect( OptionException.class );
-
-        parser.accepts( "foo" ).requiredIf( "bar" );
+        assertThrows( OptionException.class, () -> parser.accepts( "foo" ).requiredIf( "bar" ) );
     }
 
     @Test

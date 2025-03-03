@@ -1,17 +1,14 @@
 package tests.joptsimple;
 
-import java.util.HashMap;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Arrays.*;
-import static java.util.Collections.*;
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:binkley@alumni.rice.edu">B. K. Oxley (binkley)</a>
@@ -30,20 +27,15 @@ public class OptionSetAsMapTest extends AbstractOptionParserFixture {
 
         OptionSet options = parser.parse( "-a", "-e", "-c", "5", "-d", "6", "-b", "4", "-d", "7", "-e", "8" );
 
-        Map<OptionSpec<?>, List<?>> expected = new HashMap<OptionSpec<?>, List<?>>() {
-            private static final long serialVersionUID = Long.MIN_VALUE;
-
-            {
-                put( a, emptyList() );
-                put( b, singletonList( "4" ) );
-                put( c, singletonList( "5" ) );
-                put( d, asList( "6", "7" ) );
-                put( e, singletonList( "8" ) );
-                put( f, singletonList( "3" ) );
-                put( g, singletonList( "4" ) );
-                put( h, emptyList() );
-            }
-        };
+        Map<OptionSpec<?>, List<?>> expected = Map.of(
+            a, List.of(),
+            b, List.of( "4" ),
+            c, List.of( "5" ),
+            d, List.of( "6", "7" ),
+            e, List.of( "8" ),
+            f, List.of( "3" ),
+            g, List.of( "4" ),
+            h, List.of() );
 
         assertEquals( expected, options.asMap() );
     }

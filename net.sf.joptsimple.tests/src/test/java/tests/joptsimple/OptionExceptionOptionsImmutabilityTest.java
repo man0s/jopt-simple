@@ -25,33 +25,24 @@
 
 package tests.joptsimple;
 
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Collections;
+
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionException;
 import joptsimple.OptionParser;
-import org.infinitest.toolkit.UnmodifiableListTestSupport;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-public class OptionExceptionOptionsImmutabilityTest extends UnmodifiableListTestSupport<String> {
-    @Override
-    protected List<String> newList() {
-        try {
-            new OptionParser( "*" );
-            throw new AssertionError( "should have raised exception" );
-        } catch ( OptionException ex ) {
-            return ex.options();
-        }
-    }
-
-    @Override
-    protected String newItem() {
-        return "c";
-    }
-
-    @Override
-    protected String containedItem() {
-        return "*";
+public class OptionExceptionOptionsImmutabilityTest {
+    @Test
+    public void listIsUnmodifiable() {
+        var exception = assertThrows( OptionException.class, () -> new OptionParser( "*" ) );
+        var list = exception.options();
+        assertTrue( list == Collections.unmodifiableList( list ) );
     }
 }

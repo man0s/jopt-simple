@@ -26,6 +26,7 @@
 package joptsimple;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 import static joptsimple.ParserRules.*;
 
@@ -34,19 +35,15 @@ import static joptsimple.ParserRules.*;
  *
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-class OptionSpecTokenizer {
+final class OptionSpecTokenizer {
     private static final char POSIXLY_CORRECT_MARKER = '+';
     private static final char HELP_MARKER = '*';
 
     private String specification;
     private int index;
 
-    OptionSpecTokenizer( String specification ) {
-        if ( specification == null ) {
-            this.specification = "";
-        } else {
-            this.specification = specification;
-        }
+    OptionSpecTokenizer(String specification) {
+        this.specification = Objects.requireNonNull( specification, "specification must not be null." );
     }
 
     boolean hasMore() {
@@ -56,7 +53,6 @@ class OptionSpecTokenizer {
     AbstractOptionSpec<?> next() {
         if ( !hasMore() )
             throw new NoSuchElementException();
-
 
         String optionCandidate = String.valueOf( specification.charAt( index ) );
         index++;
@@ -88,7 +84,7 @@ class OptionSpecTokenizer {
         return spec;
     }
 
-    void configure( OptionParser parser ) {
+    final void configure( OptionParser parser ) {
         adjustForPosixlyCorrect( parser );
 
         while ( hasMore() )

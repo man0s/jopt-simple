@@ -25,11 +25,13 @@
 
 package tests.joptsimple;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import joptsimple.OptionException;
 import joptsimple.OptionSet;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
@@ -45,9 +47,9 @@ public class PunctuationInLongOptionTest extends AbstractOptionParserFixture {
         assertOptionAllowed( "a-cra-zy-but-le--gal---o-p-t-i-o--n-----" );
     }
 
-    @Test( expected = OptionException.class )
+    @Test
     public void disallowsHyphensAtFrontOfOptionName() {
-        parser.accepts( "-weird-option" );
+        assertThrows( OptionException.class, () -> parser.accepts( "-weird-option" ) );
     }
 
     @Test

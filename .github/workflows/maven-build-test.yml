@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        jdk: [11, 17, 21]
+        jdk: [17, 21]
     env:
       MAVEN_OPTS: "-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true"
     steps:
@@ -20,17 +20,8 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: '${{ matrix.jdk }}'
-          distribution: 'adopt'
+          distribution: 'temurin'
+          cache: maven
 
-      - name: Cache Maven packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-maven
-
-      - name: Install Maven wrapper
-        run: mvn -N -q io.takari:maven:wrapper -Dmaven=3.8.1
-    
       - name: Build and Test
-        run: ./mvnw --show-version --errors --batch-mode clean verify
+        run: mvn --show-version --errors --batch-mode --update-snapshots verify

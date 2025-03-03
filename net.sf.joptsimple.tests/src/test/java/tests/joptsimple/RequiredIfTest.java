@@ -25,22 +25,24 @@
 
 package tests.joptsimple;
 
-import static java.util.Arrays.*;
-import static java.util.Collections.*;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionException;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
 public class RequiredIfTest extends AbstractOptionParserFixture {
-    @Before
+    @BeforeEach
     public void configureParser() {
         OptionSpec<Void> ftp = parser.acceptsAll( asList( "ftp", "file-transfer" ) );
         parser.acceptsAll( asList( "username", "userid" ) ).requiredIf( "file-transfer" ).withRequiredArg();
@@ -50,23 +52,17 @@ public class RequiredIfTest extends AbstractOptionParserFixture {
 
     @Test
     public void rejectsCommandLineMissingConditionallyRequiredOption() {
-        thrown.expect( OptionException.class );
-
-        parser.parse( "--ftp" );
+        assertThrows( OptionException.class, () -> parser.parse( "--ftp" ) );
     }
 
     @Test
     public void rejectsCommandLineMissingConditionallyRequiredOptionSynonym() {
-        thrown.expect( OptionException.class );
-
-        parser.parse( "--file-transfer" );
+        assertThrows( OptionException.class, () -> parser.parse( "--file-transfer" ) );
     }
 
     @Test
     public void rejectsCommandLineWithNotAllConditionallyRequiredOptionsPresent() {
-        thrown.expect( OptionException.class );
-
-        parser.parse( "--ftp", "--username", "joe" );
+        assertThrows( OptionException.class, () -> parser.parse( "--ftp", "--username", "joe" ) );
     }
 
     @Test
@@ -92,16 +88,12 @@ public class RequiredIfTest extends AbstractOptionParserFixture {
 
     @Test
     public void rejectsOptionNotAlreadyConfigured() {
-        thrown.expect( OptionException.class );
-
-        parser.accepts( "foo" ).requiredIf( "bar" );
+        assertThrows( OptionException.class, () -> parser.accepts( "foo" ).requiredIf( "bar" ) );
     }
 
     @Test
     public void rejectsOptionSpecNotAlreadyConfigured() {
-        thrown.expect( OptionException.class );
-
-        parser.accepts( "foo" ).requiredIf( "bar" );
+        assertThrows( OptionException.class, () -> parser.accepts( "foo" ).requiredIf( "bar" ) );
     }
 
     @Test

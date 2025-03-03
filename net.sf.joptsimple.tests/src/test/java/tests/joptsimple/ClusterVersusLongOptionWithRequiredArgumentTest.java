@@ -25,20 +25,23 @@
 
 package tests.joptsimple;
 
-import static java.util.Collections.*;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionException;
 import joptsimple.OptionSet;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
 public class ClusterVersusLongOptionWithRequiredArgumentTest extends AbstractOptionParserFixture {
-    @Before
+    @BeforeEach
     public final void initializeParser() {
         parser.accepts( "fox" );
         parser.accepts( "f" );
@@ -106,9 +109,9 @@ public class ClusterVersusLongOptionWithRequiredArgumentTest extends AbstractOpt
         assertEquals( singletonList( "o" ), options.valuesOf( "x" ) );
     }
 
-    @Test( expected = OptionException.class )
+    @Test
     public void longOptionWithMessedUpOrder() {
-        parser.parse( "--fxo" );
+        assertThrows( OptionException.class, () -> parser.parse( "--fxo" ));
     }
 
     @Test

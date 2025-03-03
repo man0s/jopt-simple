@@ -25,53 +25,51 @@
 
 package tests.joptsimple;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
+
 import joptsimple.ArgumentAcceptingOptionSpec;
 import joptsimple.OptionParser;
-import org.junit.Test;
-
-import static org.infinitest.toolkit.Assertions.*;
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
 public class ArgumentAcceptingOptionSpecTest {
-    @Test( expected = NullPointerException.class )
+    @Test
     public void requiredArgOfNullType() {
-        new OptionParser().accepts( "a" ).withRequiredArg().ofType( null );
+        assertThrows( NullPointerException.class, () -> new OptionParser().accepts( "a" ).withRequiredArg().ofType( null ));
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void optionalArgOfNullType() {
-        new OptionParser().accepts( "verbose" ).withOptionalArg().ofType( null );
+    	assertThrows( NullPointerException.class, () -> new OptionParser().accepts( "verbose" ).withOptionalArg().ofType( null ));
     }
 
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void requiredArgOfNonValueType() {
-        new OptionParser().accepts( "threshold" ).withRequiredArg().ofType( Object.class );
+    	assertThrows( IllegalArgumentException.class, () -> new OptionParser().accepts( "threshold" ).withRequiredArg().ofType( Object.class ));
     }
 
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void optionalArgOfNonValueType() {
-        new OptionParser().accepts( "max" ).withOptionalArg().ofType( Object.class );
+    	assertThrows( IllegalArgumentException.class, () -> new OptionParser().accepts( "max" ).withOptionalArg().ofType( Object.class ));
     }
 
     @Test
     public void requiredArgOfValueTypeBasedOnValueOf() {
-        assertNoException(
-            () -> new OptionParser().accepts( "threshold" ).withRequiredArg().ofType( ValueOfHaver.class ) );
+        new OptionParser().accepts( "threshold" ).withRequiredArg().ofType( ValueOfHaver.class );
     }
 
     @Test
     public void optionalArgOfValueTypeBasedOnValueOf() {
-        assertNoException(
-            () -> new OptionParser().accepts( "abc" ).withOptionalArg().ofType( ValueOfHaver.class ) );
+        new OptionParser().accepts( "abc" ).withOptionalArg().ofType( ValueOfHaver.class );
     }
 
     @Test
     public void requiredArgOfValueTypeBasedOnCtor() {
-        assertNoException(
-            () -> new OptionParser().accepts( "threshold" ).withRequiredArg().ofType( Ctor.class ) );
+    	new OptionParser().accepts( "threshold" ).withRequiredArg().ofType( Ctor.class );
     }
 
     @Test
@@ -79,49 +77,47 @@ public class ArgumentAcceptingOptionSpecTest {
         OptionParser parser = new OptionParser();
         ArgumentAcceptingOptionSpec<String> spec = parser.accepts( "abc" ).withOptionalArg();
 
-        assertNoException(() -> {
-            ArgumentAcceptingOptionSpec<Ctor> typed = spec.ofType( Ctor.class );
-            assertEquals( "foo", parser.parse( "--abc", "foo" ).valueOf( typed ).getS() );
-        });
+        ArgumentAcceptingOptionSpec<Ctor> typed = spec.ofType( Ctor.class );
+        assertEquals( "foo", parser.parse( "--abc", "foo" ).valueOf( typed ).getS() );
     }
 
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void rejectsUnicodeZeroAsCharValueSeparatorForRequiredArgument() {
-        new OptionParser().accepts( "a" ).withRequiredArg().withValuesSeparatedBy( '\u0000' );
+    	assertThrows( IllegalArgumentException.class, () -> new OptionParser().accepts( "a" ).withRequiredArg().withValuesSeparatedBy( '\u0000' ));
     }
 
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void rejectsUnicodeZeroAsCharValueSeparatorForOptionalArgument() {
-        new OptionParser().accepts( "b" ).withOptionalArg().withValuesSeparatedBy( '\u0000' );
+    	assertThrows( IllegalArgumentException.class, () -> new OptionParser().accepts( "b" ).withOptionalArg().withValuesSeparatedBy( '\u0000' ));
     }
 
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void rejectsUnicodeZeroInStringValueSeparatorForRequiredArgument() {
-        new OptionParser().accepts( "c" ).withRequiredArg().withValuesSeparatedBy( "::\u0000::" );
+    	assertThrows( IllegalArgumentException.class, () -> new OptionParser().accepts( "c" ).withRequiredArg().withValuesSeparatedBy( "::\u0000::" ));
     }
 
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void rejectsUnicodeZeroInStringValueSeparatorForOptionalArgument() {
-        new OptionParser().accepts( "d" ).withOptionalArg().withValuesSeparatedBy( "::::\u0000" );
+    	assertThrows( IllegalArgumentException.class, () -> new OptionParser().accepts( "d" ).withOptionalArg().withValuesSeparatedBy( "::::\u0000" ));
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void rejectsNullConverter() {
-        new OptionParser().accepts( "c" ).withRequiredArg().withValuesConvertedBy( null );
+    	assertThrows( NullPointerException.class, () -> new OptionParser().accepts( "c" ).withRequiredArg().withValuesConvertedBy( null ));
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void rejectsNullDefaultValue() {
-        new OptionParser().accepts( "d" ).withRequiredArg().ofType( Integer.class ).defaultsTo( (Integer) null );
+    	assertThrows( NullPointerException.class, () -> new OptionParser().accepts( "d" ).withRequiredArg().ofType( Integer.class ).defaultsTo( (Integer) null ));
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void rejectsNullDefaultValueRemainder() {
-        new OptionParser().accepts( "d" ).withRequiredArg().ofType( Integer.class ).defaultsTo( 2, (Integer[]) null );
+    	assertThrows( NullPointerException.class, () -> new OptionParser().accepts( "d" ).withRequiredArg().ofType( Integer.class ).defaultsTo( 2, (Integer[]) null ));
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void rejectsNullInDefaultValueRemainder() {
-        new OptionParser().accepts( "d" ).withRequiredArg().ofType( Integer.class ).defaultsTo( 2, 3, null );
+    	assertThrows( NullPointerException.class, () -> new OptionParser().accepts( "d" ).withRequiredArg().ofType( Integer.class ).defaultsTo( 2, 3, null ));
     }
 }

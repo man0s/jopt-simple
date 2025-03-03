@@ -25,15 +25,15 @@
 
 package tests.joptsimple;
 
-import joptsimple.ValueConverter;
-import org.junit.Test;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Collections.*;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import joptsimple.ValueConverter;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>

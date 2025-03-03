@@ -25,43 +25,33 @@
 
 package tests.joptsimple;
 
-import java.util.Collection;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static java.util.Arrays.*;
+import java.util.stream.Stream;
 
-import joptsimple.util.KeyValuePair;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import joptsimple.KeyValuePair;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-@RunWith( Parameterized.class )
 public class ToStringTest {
-    private final Object subject;
-    private final String[] substrings;
 
-    public ToStringTest( Object subject, String[] substrings ) {
-        this.subject = subject;
-        this.substrings = substrings.clone();
+    private static Stream<Arguments> givesUsefulStringRepresentations() {
+        return Stream.of( Arguments.arguments(
+             KeyValuePair.valueOf( "key=value" ), new String[] { "key", "=", "value" }
+        ) );
     }
 
-    @Parameterized.Parameters
-    public static Collection<?> objectsAndStringRepresentations() {
-        return asList( new Object[][] {
-            { KeyValuePair.valueOf( "key=value" ), new String[] { "key", "=", "value" } },
-        } );
-    }
-
-    @Test
-    public void givesUsefulStringRepresentations() {
+    @ParameterizedTest
+    @MethodSource
+    public void givesUsefulStringRepresentations( KeyValuePair subject, String[] substrings ) {
         String stringRepresentation = subject.toString();
 
         for ( String each : substrings )
-            assertThat( stringRepresentation, containsString( each ) );
+            assertTrue( stringRepresentation.contains(each) );
     }
 }

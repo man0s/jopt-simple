@@ -25,24 +25,26 @@
 
 package tests.joptsimple;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Optional;
 
-import static java.util.Arrays.asList;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionException;
 import joptsimple.OptionSet;
-import org.junit.Before;
-import org.junit.Test;
-
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
-import static org.junit.Assert.assertEquals;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
 public class ShortOptionsRequiredArgumentTest extends AbstractOptionParserFixture {
-    @Before
+    @BeforeEach
     public final void initializeParser() {
         parser.accepts( "d" ).withRequiredArg();
         parser.accepts( "e" );
@@ -52,10 +54,8 @@ public class ShortOptionsRequiredArgumentTest extends AbstractOptionParserFixtur
 
     @Test
     public void argumentNotPresent() {
-        thrown.expect( OptionException.class );
-        thrown.expect( ExceptionMatchers.withOption( "d" ) );
-
-        parser.parse( "-d" );
+        var exception = assertThrows( OptionException.class, () -> parser.parse( "-d" ) );
+        assertTrue( exception.options().contains( "d" ) );
     }
 
     @Test
@@ -69,10 +69,8 @@ public class ShortOptionsRequiredArgumentTest extends AbstractOptionParserFixtur
     }
 
     @Test
-    public void clusteredOptionsWithLastOneAcceptingAnArgumentButMissing() {
-        thrown.expect( OptionException.class );
-        
-        parser.parse( "-fed" );
+    public void clusteredOptionsWithLastOneAcceptingAnArgumentButMissing() {        
+        assertThrows( OptionException.class, () -> parser.parse( "-fed" ) );
     }
     
     @Test

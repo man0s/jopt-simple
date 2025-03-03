@@ -25,30 +25,28 @@
 
 package tests.joptsimple;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeEach;
+
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
-
-import static org.junit.Assert.*;
-import static org.junit.rules.ExpectedException.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
 public abstract class AbstractOptionParserFixture {
-    @Rule public final ExpectedException thrown = none();
 
     protected OptionParser parser;
 
-    @Before
+    @BeforeEach
     public final void createNewParser() {
         parser = new OptionParser();
     }
 
     static void assertOptionDetected( OptionSet detectedOptions, String option ) {
-        assertTrue( "option '" + option + "' not detected?", detectedOptions.has( option ) );
+        assertTrue( detectedOptions.has( option ), "option '" + option + "' not detected?" );
     }
 
     static void assertOptionNotDetected( OptionSet detectedOptions, String option ) {
@@ -56,6 +54,6 @@ public abstract class AbstractOptionParserFixture {
     }
 
     static void assertOptionNotDetected( String message, OptionSet detectedOptions, String option ) {
-        assertFalse( message, detectedOptions.has( option ) );
+        assertFalse( detectedOptions.has( option ), message );
     }
 }

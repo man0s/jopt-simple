@@ -53,14 +53,4 @@ public class RequiredArgumentOptionSpecValuesImmutabilityTest
     protected String secondArg() {
         return "arg2";
     }
-
-    @Override
-    protected String newItem() {
-        return "arg3";
-    }
-
-    @Override
-    protected String containedItem() {
-        return "arg1";
-    }
 }

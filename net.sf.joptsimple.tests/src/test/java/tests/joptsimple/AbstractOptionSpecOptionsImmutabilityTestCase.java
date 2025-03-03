@@ -25,29 +25,28 @@
 
 package tests.joptsimple;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Collections;
 import java.util.List;
 
+import org.junit.jupiter.api.Test;
+
 import joptsimple.AbstractOptionSpec;
-import org.infinitest.toolkit.UnmodifiableListTestSupport;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-public abstract class AbstractOptionSpecOptionsImmutabilityTestCase extends UnmodifiableListTestSupport<String> {
-    @Override
+public abstract class AbstractOptionSpecOptionsImmutabilityTestCase {
     protected List<String> newList() {
-        AbstractOptionSpec<?> spec = newOptionSpec( containedItem() );
+        AbstractOptionSpec<?> spec = newOptionSpec( "option" );
         return spec.options();
     }
-
-    @Override
-    protected final String newItem() {
-        return "not";
-    }
-
-    @Override
-    protected String containedItem() {
-        return "in";
+    
+    @Test
+    public void listIsUnmodifiable() {
+        var list = newList();
+        assertTrue( list == Collections.unmodifiableList( list ) );
     }
 
     protected abstract AbstractOptionSpec<?> newOptionSpec( String option );

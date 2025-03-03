@@ -189,14 +189,11 @@ public class OptionSet {
         requireNonNull( option );
 
         List<V> values = valuesOf( option );
-        switch ( values.size() ) {
-            case 0:
-                return null;
-            case 1:
-                return values.get( 0 );
-            default:
-                throw new MultipleArgumentsForOptionException( option );
-        }
+        return switch ( values.size() ) {
+            case 0 -> null;
+            case 1 -> values.get( 0 );
+            default -> throw new MultipleArgumentsForOptionException( option );
+        };
     }
 
     /**

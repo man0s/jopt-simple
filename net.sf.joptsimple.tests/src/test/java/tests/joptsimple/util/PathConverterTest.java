@@ -1,25 +1,25 @@
 package tests.joptsimple.util;
 
+import static joptsimple.converter.PathPredicate.DIRECTORY_EXISTING;
+import static joptsimple.converter.PathPredicate.FILE_OVERWRITABLE;
+import static joptsimple.converter.PathPredicate.NOT_EXISTING;
+import static joptsimple.converter.PathPredicate.READABLE;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 import joptsimple.ValueConversionException;
-import joptsimple.util.PathConverter;
-import joptsimple.util.PathProperties;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
-import static joptsimple.util.PathProperties.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import joptsimple.converter.PathConverter;
+import joptsimple.converter.PathPredicate;
 
 public class PathConverterTest {
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
-
     @Test
     public void convertsValuesToPaths() throws Exception {
         Path path = Files.createTempFile( "prefix", null );
@@ -27,13 +27,13 @@ public class PathConverterTest {
 
         String pathName = path.toString();
 
-        Assert.assertEquals( path, new PathConverter( (PathProperties[]) null ).convert( pathName ) );
-        assertEquals( path, new PathConverter().convert( pathName ) );
+        assertEquals( path, PathConverter.of( new PathPredicate[] {} ).convert( pathName ) );
+        assertEquals( path, PathConverter.of( List.of() ).convert( pathName ) );
     }
 
     @Test
     public void answersCorrectValueType() {
-        assertEquals( Path.class, new PathConverter().valueType() );
+        assertEquals( Path.class, PathConverter.of().valueType() );
     }
 
     @Test
@@ -43,10 +43,10 @@ public class PathConverterTest {
 
         String pathName = path.toString();
 
-        assertTrue( Files.isReadable( new PathConverter( READABLE ).convert( pathName ) ) );
-        assertTrue( Files.exists( new PathConverter( READABLE ).convert( pathName ) ) );
-        assertTrue( Files.isWritable( new PathConverter( READABLE ).convert( pathName ) ) );
-        assertTrue( Files.isWritable( new PathConverter( FILE_OVERWRITABLE).convert( pathName ) ) );
+        assertTrue( Files.isReadable( PathConverter.of( READABLE ).convert( pathName ) ) );
+        assertTrue( Files.exists( PathConverter.of( READABLE ).convert( pathName ) ) );
+        assertTrue( Files.isWritable( PathConverter.of( READABLE ).convert( pathName ) ) );
+        assertTrue( Files.isWritable( PathConverter.of( FILE_OVERWRITABLE ).convert( pathName ) ) );
     }
 
     @Test
@@ -55,7 +55,7 @@ public class PathConverterTest {
 
         Files.deleteIfExists( path );
 
-        assertFalse( Files.exists( new PathConverter( NOT_EXISTING ).convert( path.toString() ) ) );
+        assertFalse( Files.exists( PathConverter.of( NOT_EXISTING ).convert( path.toString() ) ) );
     }
 
     @Test
@@ -64,10 +64,9 @@ public class PathConverterTest {
         String pathName = path.toString();
         Files.deleteIfExists( path );
 
-        exception.expect( ValueConversionException.class );
-        exception.expectMessage( "File [" + pathName );
-
-        new PathConverter( READABLE ).convert( pathName );
+        var exception =
+            assertThrows( ValueConversionException.class, () -> PathConverter.of( READABLE ).convert( pathName ) );
+        assertTrue( exception.getMessage().contains( "File [" + pathName ) );
     }
 
     @Test
@@ -77,7 +76,7 @@ public class PathConverterTest {
 
         String pathName = path.toString();
 
-        assertTrue( Files.isDirectory( new PathConverter( DIRECTORY_EXISTING ).convert( pathName ) ) );
+        assertTrue( Files.isDirectory( PathConverter.of( DIRECTORY_EXISTING ).convert( pathName ) ) );
     }
 
     @Test
@@ -87,10 +86,9 @@ public class PathConverterTest {
 
         String pathName = path.toString();
 
-        exception.expect( ValueConversionException.class );
-        exception.expectMessage( "File [" + pathName );
-
-        new PathConverter( FILE_OVERWRITABLE ).convert( pathName );
+        var exception = assertThrows( ValueConversionException.class,
+            () -> PathConverter.of( FILE_OVERWRITABLE ).convert( pathName ) );
+        assertTrue( exception.getMessage().contains( "File [" + pathName ) );
     }
 
     @Test
@@ -99,9 +97,8 @@ public class PathConverterTest {
         String pathName = path.toString();
         Files.deleteIfExists( path );
 
-        exception.expect( ValueConversionException.class );
-        exception.expectMessage( "File [" + pathName );
-
-        new PathConverter( FILE_OVERWRITABLE ).convert( pathName );
+        var exception = assertThrows( ValueConversionException.class,
+            () -> PathConverter.of( FILE_OVERWRITABLE ).convert( pathName ) );
+        assertTrue( exception.getMessage().contains( "File [" + pathName ) );
     }
 }

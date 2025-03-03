@@ -21,65 +21,66 @@
  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+*/
 
-package tests.joptsimple;
+package tests.joptsimple.util;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAccessor;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import joptsimple.OptionParser;
-import joptsimple.OptionSet;
+import joptsimple.ValueConversionException;
+import joptsimple.converter.DateTimeConverter;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-public class PopulatedOptionSetTest {
-    private OptionSet populated;
+public class DateTimeConverterTest {
+
+    private DateTimeConverter converter;
 
     @BeforeEach
     public void setUp() {
-        OptionParser parser = new OptionParser();
-        parser.accepts( "a" );
-        parser.accepts( "b" ).withRequiredArg();
-        populated = parser.parse( "-a", "-b", "arg-of-b" );
+        converter = DateTimeConverter.of( "MM/dd/yyyy" );
     }
 
     @Test
-    public void hasArgument() {
-        assertFalse( populated.hasArgument( "a" ) );
-        assertTrue( populated.hasArgument( "b" ) );
+    public void rejectsNullDateFormatter() {
+        assertThrows( NullPointerException.class, () -> DateTimeConverter.of( null ) );
     }
 
     @Test
-    public void valueOf() {
-        assertNull( populated.valueOf( "a" ) );
-        assertEquals( "arg-of-b", populated.valueOf( "b" ) );
+    public void shouldConvertValuesToDatesUsingADateFormat() {
+        assertEquals( LocalDate.of( 2009, 1, 24 ), LocalDate.from( converter.convert( "01/24/2009" ) ) );
     }
 
     @Test
-    public void valueOfOptional() {
-        assertEquals( Optional.empty(), populated.valueOfOptional( "a" ) );
-        assertEquals( Optional.of( "arg-of-b" ), populated.valueOfOptional( "b" ) );
+    public void rejectsNonParsableValues() {
+        assertThrows( ValueConversionException.class, () -> converter.convert( "@(#*^" ) );
     }
 
     @Test
-    public void valuesOf() {
-        assertEquals( emptyList(), populated.valuesOf( "a" ) );
-        assertEquals( singletonList( "arg-of-b" ), populated.valuesOf( "b" ) );
+    public void rejectsValuesThatDoNotEntirelyMatch() {
+        assertThrows( ValueConversionException.class, () -> converter.convert( "12/25/09 00:00:00" ) );
     }
 
     @Test
-    public void hasOptions() {
-        assertTrue( populated.hasOptions() );
+    public void shouldRaiseExceptionThatContainsDatePatternAndValue() {
+        var exception = assertThrows( ValueConversionException.class,
+            () -> converter.convert( "qwe" ) );
+        assertTrue( exception.getMessage().contains( "qwe" ) );
+        assertTrue( exception.getMessage().contains( "MM/dd/yyyy" ) );
+    }
+
+    @Test
+    public void shouldAnswerCorrectValueType() {
+        assertSame( TemporalAccessor.class, converter.valueType() );
     }
 }

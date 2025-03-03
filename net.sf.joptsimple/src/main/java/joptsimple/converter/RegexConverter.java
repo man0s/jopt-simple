@@ -23,13 +23,12 @@
  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-package joptsimple.util;
+package joptsimple.converter;
+
+import static joptsimple.internal.Messages.message;
 
 import java.util.Locale;
 import java.util.regex.Pattern;
-
-import static java.util.regex.Pattern.*;
-import static joptsimple.internal.Messages.message;
 
 import joptsimple.ValueConversionException;
 import joptsimple.ValueConverter;
@@ -39,20 +38,24 @@ import joptsimple.ValueConverter;
  *
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-public class RegexMatcher implements ValueConverter<String> {
+public final class RegexConverter implements ValueConverter<String> {
     private final Pattern pattern;
+
+    private RegexConverter(String pattern, int flags) {
+        this.pattern = Pattern.compile( pattern, flags );
+    }
 
     /**
      * Creates a matcher that uses the given regular expression, modified by the given flags.
      *
      * @param pattern the regular expression pattern
-     * @param flags modifying regex flags
-     * @throws IllegalArgumentException if bit values other than those corresponding to the defined match flags are
-     * set in {@code flags}
+     * @param flags   modifying regex flags
+     * @throws IllegalArgumentException               if bit values other than those corresponding to the defined match
+     *                                                flags are set in {@code flags}
      * @throws java.util.regex.PatternSyntaxException if the expression's syntax is invalid
      */
-    public RegexMatcher( String pattern, int flags ) {
-        this.pattern = compile( pattern, flags );
+    public static RegexConverter of( String pattern, int flags ) {
+        return new RegexConverter( pattern, flags );
     }
 
     /**
@@ -62,8 +65,8 @@ public class RegexMatcher implements ValueConverter<String> {
      * @return the new converter
      * @throws java.util.regex.PatternSyntaxException if the expression's syntax is invalid
      */
-    public static ValueConverter<String> regex( String pattern ) {
-        return new RegexMatcher( pattern, 0 );
+    public static RegexConverter of( String pattern ) {
+        return new RegexConverter( pattern, 0 );
     }
 
     @Override
@@ -89,7 +92,7 @@ public class RegexMatcher implements ValueConverter<String> {
         String message = message(
             Locale.getDefault(),
             "joptsimple.ExceptionMessages",
-            RegexMatcher.class,
+            RegexConverter.class,
             "message",
             value,
             pattern.pattern() );

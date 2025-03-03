@@ -38,9 +38,4 @@ public class AlternativeLongOptionSpecOptionsImmutabilityTest extends AbstractOp
         parser.recognizeAlternativeLongOptions( true );
         return (AbstractOptionSpec<?>) parser.recognizedOptions().get( "W" );
     }
-
-    @Override
-    protected String containedItem() {
-        return "W";
-    }
 }

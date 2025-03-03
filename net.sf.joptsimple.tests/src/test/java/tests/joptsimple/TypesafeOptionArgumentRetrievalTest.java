@@ -25,8 +25,20 @@
 
 package tests.joptsimple;
 
+import static java.lang.Short.parseShort;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.List;
 import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
 
 import joptsimple.ArgumentAcceptingOptionSpec;
 import joptsimple.OptionException;
@@ -34,12 +46,6 @@ import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 import joptsimple.ValueConversionException;
 import joptsimple.ValueConverter;
-import org.junit.Test;
-
-import static java.lang.Short.*;
-import static java.util.Arrays.*;
-import static java.util.Collections.*;
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
@@ -128,9 +134,10 @@ public class TypesafeOptionArgumentRetrievalTest extends AbstractOptionParserFix
         assertEquals( singletonList( Byte.valueOf( "3" ) ), options.valuesOf( optionB ) );
     }
 
-    @Test( expected = IllegalArgumentException.class )
+    @Test
     public void primitiveCharAllowedAsTypeSpecifier() {
-        parser.accepts( "c" ).withRequiredArg().ofType( char.class );
+        assertThrows( IllegalArgumentException.class,
+            () -> parser.accepts( "c" ).withRequiredArg().ofType( char.class ) );
     }
 
     @Test
@@ -167,7 +174,7 @@ public class TypesafeOptionArgumentRetrievalTest extends AbstractOptionParserFix
     public void primitiveLongAllowedAsTypeSpecifier() {
         OptionSpec<Long> optionG = parser.accepts( "g" ).withOptionalArg().ofType( long.class );
 
-        OptionSet options = parser.parse("-g", "12");
+        OptionSet options = parser.parse( "-g", "12" );
 
         assertTrue( options.has( optionG ) );
         assertEquals( singletonList( 12L ), options.valuesOf( optionG ) );
@@ -220,26 +227,30 @@ public class TypesafeOptionArgumentRetrievalTest extends AbstractOptionParserFix
         assertEquals( emptyList(), options.valuesOf( new FakeOptionSpec<String>( "h" ) ) );
     }
 
-    @Test( expected = ClassCastException.class )
+    @Test
     public void canSubvertTypeSafetyIfYouUseAnOptionSpecAsTheWrongType() {
         ArgumentAcceptingOptionSpec<String> optionI = parser.accepts( "i" ).withRequiredArg();
         optionI.ofType( Integer.class );
 
         OptionSet options = parser.parse( "-i", "2" );
 
-        @SuppressWarnings( "unused" )
-        String value = optionI.value( options );
+        assertThrows( ClassCastException.class, () -> {
+            @SuppressWarnings("unused")
+            String __ = optionI.value( options );
+        } );
     }
 
-    @Test( expected = ClassCastException.class )
+    @Test
     public void canSubvertTypeSafetyIfYouGiveAnOptionSpecToOptionSetAsTheWrongType() {
         ArgumentAcceptingOptionSpec<String> optionJ = parser.accepts( "j" ).withRequiredArg();
         optionJ.ofType( Integer.class );
 
         OptionSet options = parser.parse( "-j", "3" );
 
-        @SuppressWarnings( "unused" )
-        String value = options.valuesOf( optionJ ).get( 0 );
+        assertThrows( ClassCastException.class, () -> {
+            @SuppressWarnings("unused")
+            String __ = options.valuesOf( optionJ ).get( 0 );
+        } );
     }
 
     @Test
@@ -298,16 +309,14 @@ public class TypesafeOptionArgumentRetrievalTest extends AbstractOptionParserFix
 
         OptionSet options = parser.parse( "-m", "a" );
 
-        thrown.expect( OptionException.class );
-        thrown.expect( ExceptionMatchers.withCauseOfType( ValueConversionException.class ) );
-
-        optionM.value( options );
+        var exception = assertThrows( OptionException.class, () -> optionM.value( options ) );
+        assertTrue( exception.getCause() instanceof ValueConversionException );
     }
 
     private static class FakeOptionSpec<V> implements OptionSpec<V> {
         private final String option;
 
-        FakeOptionSpec( String option ) {
+        FakeOptionSpec(String option) {
             this.option = option;
         }
 

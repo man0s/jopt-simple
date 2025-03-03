@@ -25,16 +25,18 @@
 
 package tests.joptsimple;
 
+import static java.util.Arrays.asList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 import joptsimple.ValueConversionException;
 import joptsimple.ValueConverter;
-import org.junit.Before;
-import org.junit.Test;
-
-import static java.util.Arrays.asList;
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
@@ -43,7 +45,7 @@ public class Issue76Test {
     private OptionParser parser;
     private OptionSpec<Integer> nonOptions;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         parser = new OptionParser();
         parser.accepts( "flag" ).withOptionalArg().withValuesConvertedBy( new ValueConverter<Boolean>() {

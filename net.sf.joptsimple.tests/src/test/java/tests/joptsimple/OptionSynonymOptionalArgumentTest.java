@@ -25,17 +25,18 @@
 
 package tests.joptsimple;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.File;
 import java.util.List;
 
-import static java.util.Arrays.*;
-import static java.util.Collections.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionSet;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
@@ -43,7 +44,7 @@ import static org.junit.Assert.*;
 public class OptionSynonymOptionalArgumentTest extends AbstractOptionParserFixture {
     private String optionArgument;
 
-    @Before
+    @BeforeEach
     public final void initializeParser() {
         parser.acceptsAll( asList( "d", "output-dir", "folder" ), "file" ).withRequiredArg().ofType( File.class );
         optionArgument = "tmp";

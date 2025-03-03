@@ -25,19 +25,20 @@
 
 package tests.joptsimple;
 
+import static java.util.Collections.emptyList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.Optional;
 
-import static java.util.Collections.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
@@ -45,7 +46,7 @@ import static org.junit.Assert.assertNull;
 public class EmptyOptionSetTest {
     private OptionSet empty;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         empty = new OptionParser().parse();
     }
@@ -75,33 +76,33 @@ public class EmptyOptionSetTest {
         assertFalse( empty.hasOptions() );
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void valueOfWithNullString() {
-        empty.valueOf( (String) null );
+        assertThrows( NullPointerException.class, () -> empty.valueOf( (String) null ) );
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void valueOfOptionalWithNullString() {
-        empty.valueOfOptional( (String) null );
+        assertThrows( NullPointerException.class, () -> empty.valueOfOptional( (String) null ) );
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void valueOfOptionalWithNullOptionSpec() {
-        empty.valueOfOptional( (OptionSpec<?>) null );
+        assertThrows( NullPointerException.class, () -> empty.valueOfOptional( (OptionSpec<?>) null ) );
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void valueOfWithNullOptionSpec() {
-        empty.valueOf( (OptionSpec<?>) null );
+        assertThrows( NullPointerException.class, () -> empty.valueOf( (OptionSpec<?>) null ) );
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void valuesOfWithNullString() {
-        empty.valuesOf( (String) null );
+        assertThrows( NullPointerException.class, () -> empty.valuesOf( (String) null ) );
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void valuesOfWithNullOptionSpec() {
-        empty.valuesOf( (OptionSpec<?>) null );
+        assertThrows( NullPointerException.class, () -> empty.valuesOf( (OptionSpec<?>) null ) );
     }
 }

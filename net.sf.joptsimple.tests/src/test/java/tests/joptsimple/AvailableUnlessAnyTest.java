@@ -25,18 +25,19 @@
 
 package tests.joptsimple;
 
+import static java.util.Collections.emptyList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import joptsimple.OptionException;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import org.junit.Before;
-import org.junit.Test;
-
-import static java.util.Collections.emptyList;
-
-import static org.junit.Assert.assertEquals;
 
 public class AvailableUnlessAnyTest extends AbstractOptionParserFixture {
-    @Before
+    @BeforeEach
     public void configureParser() {
         parser.accepts( "a" );
         parser.accepts( "b" );
@@ -47,16 +48,12 @@ public class AvailableUnlessAnyTest extends AbstractOptionParserFixture {
 
     @Test
     public void rejectsCommandLineExistingForbiddenOption() {
-        thrown.expect( OptionException.class );
-
-        parser.parse( "-a", "-n" );
+        assertThrows( OptionException.class, () -> parser.parse( "-a", "-n" ) );
     }
 
     @Test
     public void rejectsCommandLineExistingOtherForbiddenOption() {
-        thrown.expect( OptionException.class );
-
-        parser.parse( "-c", "-n" );
+        assertThrows( OptionException.class, () -> parser.parse( "-c", "-n" ) );
     }
 
     @Test
@@ -68,9 +65,7 @@ public class AvailableUnlessAnyTest extends AbstractOptionParserFixture {
 
     @Test
     public void rejectsCommandLineWithNotAllConditionallyRequiredOptionsPresent() {
-        thrown.expect( OptionException.class );
-
-        parser.parse( "-a", "-c", "-n" );
+        assertThrows( OptionException.class, () -> parser.parse( "-a", "-c", "-n" ) );
     }
 
     @Test

@@ -25,10 +25,11 @@
 
 package tests.joptsimple;
 
-import joptsimple.OptionParser;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+
+import joptsimple.OptionParser;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>

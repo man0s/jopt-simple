@@ -25,16 +25,14 @@
 
 package joptsimple;
 
+import static java.util.Collections.unmodifiableList;
+import static java.util.Objects.requireNonNull;
+import static joptsimple.internal.Reflection.findConverter;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.StringTokenizer;
-
-import static java.util.Collections.*;
-import static java.util.Objects.*;
-
-import static joptsimple.internal.Reflection.*;
-import static joptsimple.internal.Strings.*;
 
 /**
  * <p>Specification of an option that accepts an argument.</p>

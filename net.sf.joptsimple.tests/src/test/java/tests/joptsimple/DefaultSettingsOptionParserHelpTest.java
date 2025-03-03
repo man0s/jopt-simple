@@ -25,6 +25,17 @@
 
 package tests.joptsimple;
 
+import static java.math.BigDecimal.TEN;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.joining;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static tests.joptsimple.Strings.LINE_SEPARATOR;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.StringWriter;
@@ -32,22 +43,13 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Stream;
 
-import static java.math.BigDecimal.*;
-import static java.util.Arrays.*;
-import static java.util.Collections.*;
-import static java.util.stream.Collectors.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionDescriptor;
-import joptsimple.util.InetAddressConverter;
-import org.junit.Before;
-import org.junit.Test;
-
-import static joptsimple.util.DateConverter.*;
-import static org.junit.Assert.*;
-import static tests.joptsimple.Strings.EMPTY;
-import static tests.joptsimple.Strings.LINE_SEPARATOR;
+import joptsimple.converter.DateTimeConverter;
+import joptsimple.converter.InetAddressConverter;
 
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
@@ -55,7 +57,7 @@ import static tests.joptsimple.Strings.LINE_SEPARATOR;
 public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFixture {
     private StringWriter sink;
 
-    @Before
+    @BeforeEach
     public final void createSink() {
         sink = new StringWriter();
     }
@@ -64,7 +66,10 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
     public void unconfiguredParser() throws Exception {
         parser.printHelpOn( sink );
 
-        assertHelpLines( "No options specified  ", EMPTY );
+        assertHelpLines(
+            """
+            No options specified  |
+            """ );
     }
 
     @Test
@@ -75,13 +80,14 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option   Description",
-            "------   -----------",
-            "--apple             ",
-            "Option   Description",
-            "------   -----------",
-            "--apple             ",
-            EMPTY );
+            """
+            Option   Description|
+            ------   -----------|
+            --apple             |
+            Option   Description|
+            ------   -----------|
+            --apple             |
+            """ );
     }
 
     @Test
@@ -91,10 +97,11 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-                "Option   Description",
-                "------   -----------",
-                "--apple             ",
-                EMPTY );
+            """
+            Option   Description|
+            ------   -----------|
+            --apple             |
+            """ );
     }
 
     @Test
@@ -104,10 +111,11 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option  Description     ",
-            "------  -----------     ",
-            "-a      some description",
-            EMPTY );
+            """
+            Option  Description     |
+            ------  -----------     |
+            -a      some description|
+            """ );
     }
 
     @Test
@@ -118,11 +126,12 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option     Description          ",
-            "------     -----------          ",
-            "-a         some description     ",
-            "--verbose  even more description",
-            EMPTY );
+            """
+            Option     Description          |
+            ------     -----------          |
+            -a         some description     |
+            --verbose  even more description|
+            """ );
     }
 
     @Test
@@ -132,10 +141,11 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option       Description",
-            "------       -----------",
-            "-a <String>             ",
-            EMPTY );
+            """
+            Option       Description|
+            ------       -----------|
+            -a <String>             |
+            """ );
     }
 
     @Test
@@ -145,10 +155,11 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option        Description",
-            "------        -----------",
-            "-a <Integer>             ",
-            EMPTY );
+            """
+            Option        Description|
+            ------        -----------|
+            -a <Integer>             |
+            """ );
     }
 
     @Test
@@ -158,24 +169,26 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                  Description        ",
-            "------                  -----------        ",
-            "-a <String: numerical>  some value you need",
-            EMPTY );
+            """
+            Option                  Description        |
+            ------                  -----------        |
+            -a <String: numerical>  some value you need|
+            """ );
     }
 
     @Test
     public void oneOptionRequiredArgWithDescriptionAndType() throws Exception {
         parser.accepts( "a", "some value you need" )
-                .withRequiredArg().describedAs( "numerical" ).ofType( Integer.class );
+            .withRequiredArg().describedAs( "numerical" ).ofType( Integer.class );
 
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                   Description        ",
-            "------                   -----------        ",
-            "-a <Integer: numerical>  some value you need",
-            EMPTY );
+            """
+            Option                   Description        |
+            ------                   -----------        |
+            -a <Integer: numerical>  some value you need|
+            """ );
     }
 
     @Test
@@ -185,10 +198,11 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                Description",
-            "------                -----------",
-            "--threshold [String]             ",
-            EMPTY );
+            """
+            Option                Description|
+            ------                -----------|
+            --threshold [String]             |
+            """ );
     }
 
     @Test
@@ -198,10 +212,11 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option      Description",
-            "------      -----------",
-            "-a [Float]             ",
-            EMPTY );
+            """
+            Option      Description|
+            ------      -----------|
+            -a [Float]             |
+            """ );
     }
 
     @Test
@@ -211,10 +226,11 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                                  Description        ",
-            "------                                  -----------        ",
-            "--threshold [String: positive integer]  some value you need",
-            EMPTY );
+            """
+            Option                                  Description        |
+            ------                                  -----------        |
+            --threshold [String: positive integer]  some value you need|
+            """ );
     }
 
     @Test
@@ -225,10 +241,11 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                                  Description        ",
-            "------                                  -----------        ",
-            "--threshold [Double: positive decimal]  some value you need",
-            EMPTY );
+            """
+            Option                                  Description        |
+            ------                                  -----------        |
+            --threshold [Double: positive decimal]  some value you need|
+            """ );
     }
 
     @Test
@@ -238,10 +255,11 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                  Description                     ",
-            "------                  -----------                     ",
-            "-W <String: opt=value>  Alternative form of long options",
-            EMPTY );
+            """
+            Option                  Description                     |
+            ------                  -----------                     |
+            -W <String: opt=value>  Alternative form of long options|
+            """ );
     }
 
     @Test
@@ -251,10 +269,11 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option        Description",
-            "------        -----------",
-            "-v, --chatty  be verbose ",
-            EMPTY );
+            """
+            Option        Description|
+            ------        -----------|
+            -v, --chatty  be verbose |
+            """ );
     }
 
     @Test
@@ -264,10 +283,11 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                 Description",
-            "------                 -----------",
-            "-L, --index <Integer>  set level  ",
-            EMPTY );
+            """
+            Option                 Description|
+            ------                 -----------|
+            -L, --index <Integer>  set level  |
+            """ );
     }
 
     @Test
@@ -278,10 +298,11 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                        Description",
-            "------                        -----------",
-            "-d, --since [Date: yyyyMMdd]  date filter",
-            EMPTY );
+            """
+            Option                        Description|
+            ------                        -----------|
+            -d, --since [Date: yyyyMMdd]  date filter|
+            """ );
     }
 
     @Test
@@ -291,10 +312,11 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                  Description",
-            "------                  -----------",
-            "-v, --chatty, --prolix             ",
-            EMPTY );
+            """
+            Option                  Description|
+            ------                  -----------|
+            -v, --chatty, --prolix             |
+            """ );
     }
 
     @Test
@@ -303,7 +325,7 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
 
         parser.printHelpOn( bytesOut );
 
-        assertEquals( "No options specified  " + LINE_SEPARATOR, bytesOut.toString() );
+        assertEquals( "No options specified  " + Strings.LINE_SEPARATOR, bytesOut.toString() );
     }
 
     // Bug 1956418
@@ -328,13 +350,14 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                                Description                       ",
-            "------                                -----------                       ",
-            "-t, --cutoff, --threshold <Double: a  a threshold value beyond which a  ",
-            "  positive decimal number that will     certain level of the application",
-            "  represent the threshold that has      should cease to write logs      ",
-            "  been outlined>                                                        ",
-            EMPTY );
+            """
+            Option                                Description                       |
+            ------                                -----------                       |
+            -t, --cutoff, --threshold <Double: a  a threshold value beyond which a  |
+              positive decimal number that will     certain level of the application|
+              represent the threshold that has      should cease to write logs      |
+              been outlined>                                                        |
+            """ );
     }
 
     // Bug 2018262
@@ -394,101 +417,105 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                                 Description                              ",
-            "------                                 -----------                              ",
-            "-?, -h                                 Shows this help message                  ",
-            "-B, --bootstrap-debug <String>         Specify a text to be logged at the       ",
-            "                                         beginning (e.g. used by Gradle's       ",
-            "                                         bootstrap class).                      ",
-            "-D, --systemprop <String>              Set system property of the JVM (e.g. -   ",
-            "                                         Dmyprop=myvalue).                      ",
-            "-I, --no-imports                       Disable usage of default imports for     ",
-            "                                         build script files.                    ",
-            "-P, --projectprop <String>             Set project property for the build       ",
-            "                                         script (e.g. -Pmyprop=myvalue).        ",
-            "-S                                     Don't trigger a System.exit(0) for       ",
-            "                                         normal termination. Used for Gradle's  ",
-            "                                         internal testing.                      ",
-            "-b, --buildfile <String>               Specifies the build file name (also for  ",
-            "                                         subprojects). Defaults to build.gradle.",
-            "-d, --debug                            Log in debug mode (includes normal       ",
-            "                                         stacktrace).                           ",
-            "-e, --embedded <String>                Specify an embedded build script.        ",
-            "-f, --full-stacktrace                  Print out the full (very verbose)        ",
-            "                                         stacktrace for any exceptions.         ",
-            "-g, --gradle-user-home <String>        Specifies the gradle user home dir.      ",
-            "-i, --ivy-quiet                        Set Ivy log level to quiet.              ",
-            "-j, --ivy-debug                        Set Ivy log level to debug (very         ",
-            "                                         verbose).                              ",
-            "-l, --plugin-properties-file <String>  Specifies the plugin.properties file.    ",
-            "-n, --non-recursive                    Do not execute primary tasks of child    ",
-            "                                         projects.                              ",
-            "-p, --project-dir <String>             Specifies the start dir for Gradle.      ",
-            "                                         Defaults to current dir.               ",
-            "-q, --quiet                            Log errors only.                         ",
-            "-r, --rebuild-cache                    Rebuild the cache of compiled build      ",
-            "                                         scripts.                               ",
-            "-s, --stacktrace                       Print out the stacktrace also for user   ",
-            "                                         exceptions (e.g. compile error).       ",
-            "-t, --tasks                            Show list of all available tasks and     ",
-            "                                         their dependencies.                    ",
-            "-u, --no-search-upward                 Don't search in parent folders for a     ",
-            "                                         settings.gradle file.                  ",
-            "-v, --version                          Print version info.                      ",
-            "-x, --cache-off                        No caching of compiled build scripts.    ",
-            EMPTY );
+            """
+            Option                                 Description                              |
+            ------                                 -----------                              |
+            -?, -h                                 Shows this help message                  |
+            -B, --bootstrap-debug <String>         Specify a text to be logged at the       |
+                                                     beginning (e.g. used by Gradle's       |
+                                                     bootstrap class).                      |
+            -D, --systemprop <String>              Set system property of the JVM (e.g. -   |
+                                                     Dmyprop=myvalue).                      |
+            -I, --no-imports                       Disable usage of default imports for     |
+                                                     build script files.                    |
+            -P, --projectprop <String>             Set project property for the build       |
+                                                     script (e.g. -Pmyprop=myvalue).        |
+            -S                                     Don't trigger a System.exit(0) for       |
+                                                     normal termination. Used for Gradle's  |
+                                                     internal testing.                      |
+            -b, --buildfile <String>               Specifies the build file name (also for  |
+                                                     subprojects). Defaults to build.gradle.|
+            -d, --debug                            Log in debug mode (includes normal       |
+                                                     stacktrace).                           |
+            -e, --embedded <String>                Specify an embedded build script.        |
+            -f, --full-stacktrace                  Print out the full (very verbose)        |
+                                                     stacktrace for any exceptions.         |
+            -g, --gradle-user-home <String>        Specifies the gradle user home dir.      |
+            -i, --ivy-quiet                        Set Ivy log level to quiet.              |
+            -j, --ivy-debug                        Set Ivy log level to debug (very         |
+                                                     verbose).                              |
+            -l, --plugin-properties-file <String>  Specifies the plugin.properties file.    |
+            -n, --non-recursive                    Do not execute primary tasks of child    |
+                                                     projects.                              |
+            -p, --project-dir <String>             Specifies the start dir for Gradle.      |
+                                                     Defaults to current dir.               |
+            -q, --quiet                            Log errors only.                         |
+            -r, --rebuild-cache                    Rebuild the cache of compiled build      |
+                                                     scripts.                               |
+            -s, --stacktrace                       Print out the stacktrace also for user   |
+                                                     exceptions (e.g. compile error).       |
+            -t, --tasks                            Show list of all available tasks and     |
+                                                     their dependencies.                    |
+            -u, --no-search-upward                 Don't search in parent folders for a     |
+                                                     settings.gradle file.                  |
+            -v, --version                          Print version info.                      |
+            -x, --cache-off                        No caching of compiled build scripts.    |
+            """ );
     }
 
     @Test
     public void dateConverterShowsDatePattern() throws Exception {
         parser.accepts( "date", "a date" )
             .withRequiredArg()
-            .withValuesConvertedBy( datePattern( "MM/dd/yy" ) );
+            .withValuesConvertedBy( DateTimeConverter.of( "MM/dd/yy" ) );
 
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option             Description",
-            "------             -----------",
-            "--date <MM/dd/yy>  a date     ",
-            EMPTY );
+            """
+            Option             Description|
+            ------             -----------|
+            --date <MM/dd/yy>  a date     |
+            """ );
     }
 
     @Test
     public void dateConverterShowsDatePatternInCombinationWithDescription() throws Exception {
         parser.accepts( "date", "a date" ).withOptionalArg()
             .describedAs( "your basic date pattern" )
-            .withValuesConvertedBy( datePattern( "MM/dd/yy" ) );
+            .withValuesConvertedBy( DateTimeConverter.of( "MM/dd/yy" ) );
 
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                             Description",
-            "------                             -----------",
-            "--date [MM/dd/yy: your basic date  a date     ",
-            "  pattern]                                    ",
-            EMPTY );
+            """
+            Option                             Description|
+            ------                             -----------|
+            --date [MM/dd/yy: your basic date  a date     |
+              pattern]                                    |
+            """ );
     }
 
     @Test
     public void inetAddressConverterShowsType() throws Exception {
         parser.accepts( "addr", "an internet address" )
             .withRequiredArg()
-            .withValuesConvertedBy( new InetAddressConverter() );
+            .withValuesConvertedBy( InetAddressConverter.of() );
 
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                Description        ",
-            "------                -----------        ",
-            "--addr <InetAddress>  an internet address",
-            EMPTY );
+            """
+            Option                Description        |
+            ------                -----------        |
+            --addr <InetAddress>  an internet address|
+            """ );
     }
 
     @Test
     public void leavesEmbeddedNewlinesInDescriptionsAlone() throws Exception {
-        List<String> descriptionPieces =
-            asList( "Specify the output type.", "'raw' = raw data.", "'java' = java class" );
+        List<String> descriptionPieces = asList( "Specify the output type.", "'raw' = raw data.",
+            "'java' = java class" );
         parser.accepts(
             "type",
             descriptionPieces.stream().collect( joining( LINE_SEPARATOR ) ) );
@@ -496,12 +523,13 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option  Description             ",
-            "------  -----------             ",
-            "--type  Specify the output type.",
-            "        'raw' = raw data.       ",
-            "        'java' = java class     ",
-            EMPTY );
+            """
+            Option  Description             |
+            ------  -----------             |
+            --type  Specify the output type.|
+                    'raw' = raw data.       |
+                    'java' = java class     |
+            """ );
     }
 
     @Test
@@ -511,10 +539,11 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option       Description   ",
-            "------       -----------   ",
-            "-a <String>  (default: boo)",
-            EMPTY );
+            """
+            Option       Description   |
+            ------       -----------   |
+            -a <String>  (default: boo)|
+            """ );
     }
 
     @Test
@@ -524,10 +553,11 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option        Description ",
-            "------        ----------- ",
-            "-b [Integer]  (default: 5)",
-            EMPTY );
+            """
+            Option        Description |
+            ------        ----------- |
+            -b [Integer]  (default: 5)|
+            """ );
     }
 
     @Test
@@ -538,10 +568,11 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                     Description             ",
-            "------                     -----------             ",
-            "-c [BigDecimal: quantity]  a quantity (default: 10)",
-            EMPTY );
+            """
+            Option                     Description             |
+            ------                     -----------             |
+            -c [BigDecimal: quantity]  a quantity (default: 10)|
+            """ );
     }
 
     @Test
@@ -552,10 +583,11 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                       Description                   ",
-            "------                       -----------                   ",
-            "-d [Integer: double dizzle]  dizzle (default: [2, 3, 5, 7])",
-            EMPTY );
+            """
+            Option                       Description                   |
+            ------                       -----------                   |
+            -d [Integer: double dizzle]  dizzle (default: [2, 3, 5, 7])|
+            """ );
     }
 
     @Test
@@ -565,10 +597,11 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option (* = required)  Description",
-            "---------------------  -----------",
-            "* -e <String>                     ",
-            EMPTY );
+            """
+            Option (* = required)  Description|
+            ---------------------  -----------|
+            * -e <String>                     |
+            """ );
     }
 
     @Test
@@ -578,11 +611,12 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Non-option arguments:",
-            "[String] -- stuff    ",
-            EMPTY,
-            "No options specified  ",
-            EMPTY );
+            """
+            Non-option arguments:|
+            [String] -- stuff    |
+
+            No options specified  |
+            """ );
     }
 
     @Test
@@ -592,11 +626,12 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Non-option arguments:",
-            "[File]               ",
-            EMPTY,
-            "No options specified  ",
-            EMPTY );
+            """
+            Non-option arguments:|
+            [File]               |
+
+            No options specified  |
+            """ );
     }
 
     @Test
@@ -606,11 +641,12 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Non-option arguments:",
-            "[String: files]      ",
-            EMPTY,
-            "No options specified  ",
-            EMPTY );
+            """
+            Non-option arguments:|
+            [String: files]      |
+
+            No options specified  |
+            """ );
     }
 
     @Test
@@ -620,11 +656,12 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Non-option arguments:",
-            "[File: files]        ",
-            EMPTY,
-            "No options specified  ",
-            EMPTY );
+            """
+            Non-option arguments:|
+            [File: files]        |
+
+            No options specified  |
+            """ );
     }
 
     @Test
@@ -634,11 +671,12 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Non-option arguments:             ",
-            "[File] -- some files to operate on",
-            EMPTY,
-            "No options specified  ",
-            EMPTY );
+            """
+            Non-option arguments:             |
+            [File] -- some files to operate on|
+
+            No options specified  |
+            """ );
     }
 
     @Test
@@ -648,18 +686,19 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Non-option arguments:                    ",
-            "[File: files] -- some files to operate on",
-            EMPTY,
-            "No options specified  ",
-            EMPTY );
+            """
+            Non-option arguments:                    |
+            [File: files] -- some files to operate on|
+
+            No options specified  |
+            """ );
     }
 
     @Test
     public void canUseCustomHelpFormatter() {
         parser.accepts( "f" );
 
-        parser.formatHelpWith(options -> {
+        parser.formatHelpWith( options -> {
             assertEquals( 1, options.size() );
 
             OptionDescriptor only = options.get( "f" );
@@ -673,12 +712,12 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
             assertFalse( only.requiresArgument() );
 
             return null;
-        });
+        } );
     }
 
-    @Test( expected = NullPointerException.class )
+    @Test
     public void rejectsNullHelpFormatter() {
-        parser.formatHelpWith( null );
+        assertThrows( NullPointerException.class, () -> parser.formatHelpWith( null ) );
     }
 
     @Test
@@ -690,12 +729,13 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option               Description                                             ",
-            "------               -----------                                             ",
-            "-F <String>          Forward port mapping (ie: localhost:5900:localhost:5900)",
-            "-R <String>          Reverse port mapping (ie: localhost:5900:localhost:5900)",
-            "--password <String>  Server Password                                         ",
-            EMPTY );
+            """
+            Option               Description                                             |
+            ------               -----------                                             |
+            -F <String>          Forward port mapping (ie: localhost:5900:localhost:5900)|
+            -R <String>          Reverse port mapping (ie: localhost:5900:localhost:5900)|
+            --password <String>  Server Password                                         |
+            """ );
     }
 
     @Test
@@ -720,27 +760,30 @@ public class DefaultSettingsOptionParserHelpTest extends AbstractOptionParserFix
         parser.printHelpOn( sink );
 
         assertHelpLines(
-            "Option                     Description                                          ",
-            "------                     -----------                                          ",
-            "-?, --help                 Display this help text                               ",
-            "-c, --check-avail          Check Galileo homepage for available books, compare  ",
-            "                             with known ones                                    ",
-            "-d, --download-dir <File>  Download directory for openbooks; must exist         ",
-            "                             (default: .)                                       ",
-            "-l, --log-level <Integer>  Log level (0=normal, 1=verbose, 2=debug, 3=trace     ",
-            "                             (default: 0)                                       ",
-            "-m, --check-md5            Download all known books without storing them,       ",
-            "                             verifying their MD5 checksum (slow! >1 Gb download)",
-            "-t, --threading <Integer>  Threading mode (0=single, 1=multi); single is        ",
-            "                             slower, but better for diagnostics) (default: 1)   ",
-            "-w, --write-config         Write editable book list to config.xml, enabling you ",
-            "                             to update MD5 checksums or add new books           ",
-            EMPTY );
+            """
+            Option                     Description                                          |
+            ------                     -----------                                          |
+            -?, --help                 Display this help text                               |
+            -c, --check-avail          Check Galileo homepage for available books, compare  |
+                                         with known ones                                    |
+            -d, --download-dir <File>  Download directory for openbooks; must exist         |
+                                         (default: .)                                       |
+            -l, --log-level <Integer>  Log level (0=normal, 1=verbose, 2=debug, 3=trace     |
+                                         (default: 0)                                       |
+            -m, --check-md5            Download all known books without storing them,       |
+                                         verifying their MD5 checksum (slow! >1 Gb download)|
+            -t, --threading <Integer>  Threading mode (0=single, 1=multi); single is        |
+                                         slower, but better for diagnostics) (default: 1)   |
+            -w, --write-config         Write editable book list to config.xml, enabling you |
+                                         to update MD5 checksums or add new books           |
+            """ );
     }
 
-    private void assertHelpLines( String... expectedLines ) {
+    private void assertHelpLines( String expectedLines ) {
         assertEquals(
-            Stream.of( expectedLines ).collect( joining( LINE_SEPARATOR ) ),
+            expectedLines
+                .replace( "|\n", "\n" )
+                .replace( "\n", Strings.LINE_SEPARATOR ),
             sink.toString() );
     }
 

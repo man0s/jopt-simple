@@ -25,12 +25,12 @@
 
 package tests.joptsimple;
 
-import static java.util.Collections.*;
+import static java.util.Collections.singletonList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
 
 import joptsimple.OptionSet;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
 
 public class OptionParserUnrecognizedOptionsAllowedTest extends AbstractOptionParserFixture {
     @Test
