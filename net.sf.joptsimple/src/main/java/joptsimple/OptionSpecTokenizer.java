@@ -43,7 +43,7 @@ final class OptionSpecTokenizer {
     private int index;
 
     OptionSpecTokenizer(String specification) {
-        this.specification = Objects.requireNonNull( "specification must not be null." );
+        this.specification = Objects.requireNonNull( specification, "specification must not be null." );
     }
 
     boolean hasMore() {
@@ -53,7 +53,6 @@ final class OptionSpecTokenizer {
     AbstractOptionSpec<?> next() {
         if ( !hasMore() )
             throw new NoSuchElementException();
-
 
         String optionCandidate = String.valueOf( specification.charAt( index ) );
         index++;
