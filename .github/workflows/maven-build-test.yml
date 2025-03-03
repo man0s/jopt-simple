@@ -21,6 +21,7 @@ jobs:
         with:
           java-version: '${{ matrix.jdk }}'
           distribution: 'adopt'
+          cache: maven
 
       - name: Build and Test
-        run: mvn --show-version --errors --batch-mode clean verify
+        run: mvn --show-version --errors --batch-mode --update-snapshots clean verify
