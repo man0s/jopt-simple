@@ -29,10 +29,6 @@ import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
 import static net.sf.joptsimple.internal.Reflection.findConverter;
 
-import static java.util.Collections.unmodifiableList;
-import static java.util.Objects.requireNonNull;
-import static joptsimple.internal.Reflection.findConverter;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
