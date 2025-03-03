@@ -24,4 +24,4 @@ jobs:
           cache: maven
 
       - name: Build and Test
-        run: mvn --show-version --errors --batch-mode --update-snapshots clean verify
+        run: mvn --show-version --errors --batch-mode --update-snapshots verify
