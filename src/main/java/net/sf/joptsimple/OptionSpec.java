@@ -49,7 +49,7 @@ import java.util.Optional;
  * @param <V> represents the type of the arguments this option accepts
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-public interface OptionSpec<V> {
+public sealed interface OptionSpec<V> permits AbstractOptionSpec {
     /**
      * Gives any arguments associated with the given option in the given set of detected options.
      *

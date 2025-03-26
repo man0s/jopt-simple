@@ -53,7 +53,8 @@ import java.util.StringTokenizer;
  * @param <V> represents the type of the arguments this option accepts
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-public abstract class ArgumentAcceptingOptionSpec<V> extends AbstractOptionSpec<V> {
+public sealed abstract class ArgumentAcceptingOptionSpec<V> extends AbstractOptionSpec<V>
+        permits AlternativeLongOptionSpec, OptionalArgumentOptionSpec, RequiredArgumentOptionSpec {
     private static final char NIL_VALUE_SEPARATOR = '\u0000';
 
     private final boolean argumentRequired;
@@ -82,11 +83,11 @@ public abstract class ArgumentAcceptingOptionSpec<V> extends AbstractOptionSpec<
      * <p>JOpt Simple accepts types that have either:</p>
      *
      * <ol>
-     *   <li>a public static method called {@code valueOf} which accepts a single argument of type {@link String}
-     *   and whose return type is the same as the class on which the method is declared.  The {@code java.lang}
-     *   primitive wrapper classes have such methods.</li>
+     * <li>a public static method called {@code valueOf} which accepts a single argument of type {@link String}
+     * and whose return type is the same as the class on which the method is declared. The {@code java.lang}
+     * primitive wrapper classes have such methods.</li>
      *
-     *   <li>a public constructor which accepts a single argument of type {@link String}.</li>
+     * <li>a public constructor which accepts a single argument of type {@link String}.</li>
      * </ol>
      *
      * <p>This class converts arguments using those methods in that order; that is, {@code valueOf} would be invoked
@@ -106,7 +107,7 @@ public abstract class ArgumentAcceptingOptionSpec<V> extends AbstractOptionSpec<
     }
 
     /**
-     * <p>Specifies a converter to use to translate arguments of this spec's option into Java objects.  This is useful
+     * <p>Specifies a converter to use to translate arguments of this spec's option into Java objects. This is useful
      * when converting to types that do not have the requisite factory method or constructor for
      * {@link #ofType(Class)}.</p>
      *
@@ -127,7 +128,7 @@ public abstract class ArgumentAcceptingOptionSpec<V> extends AbstractOptionSpec<
     }
 
     /**
-     * <p>Specifies a description for the argument of the option that this spec represents.  This description is used
+     * <p>Specifies a description for the argument of the option that this spec represents. This description is used
      * when generating help information about the parser.</p>
      *
      * @param description describes the nature of the argument of this spec's option
@@ -139,8 +140,8 @@ public abstract class ArgumentAcceptingOptionSpec<V> extends AbstractOptionSpec<
     }
 
     /**
-     * <p>Specifies a value separator for the argument of the option that this spec represents.  This allows a single
-     * option argument to represent multiple values for the option.  For example:</p>
+     * <p>Specifies a value separator for the argument of the option that this spec represents. This allows a single
+     * option argument to represent multiple values for the option. For example:</p>
      *
      * <pre>
      *   <code>
@@ -168,8 +169,8 @@ public abstract class ArgumentAcceptingOptionSpec<V> extends AbstractOptionSpec<
     }
 
     /**
-     * <p>Specifies a value separator for the argument of the option that this spec represents.  This allows a single
-     * option argument to represent multiple values for the option.  For example:</p>
+     * <p>Specifies a value separator for the argument of the option that this spec represents. This allows a single
+     * option argument to represent multiple values for the option. For example:</p>
      *
      * <pre>
      *   <code>

@@ -52,7 +52,7 @@ import static net.sf.joptsimple.internal.Reflection.*;
  * @param <V> represents the type of the non-option arguments
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-public class NonOptionArgumentSpec<V> extends AbstractOptionSpec<V> {
+public final class NonOptionArgumentSpec<V> extends AbstractOptionSpec<V> {
     public static final String NAME = "[arguments]";
 
     private ValueConverter<V> converter;

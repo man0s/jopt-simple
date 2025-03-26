@@ -33,7 +33,7 @@ import java.util.List;
  * @param <V> represents the type of the arguments this option accepts
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-class RequiredArgumentOptionSpec<V> extends ArgumentAcceptingOptionSpec<V> {
+final class RequiredArgumentOptionSpec<V> extends ArgumentAcceptingOptionSpec<V> {
     RequiredArgumentOptionSpec( String option ) {
         super( option, true );
     }

@@ -25,8 +25,6 @@
 
 package net.sf.joptsimple;
 
-import net.sf.joptsimple.ValueConverter;
-
 class SwitchConverter implements ValueConverter<Boolean> {
     @Override
     public Boolean convert( String value ) {

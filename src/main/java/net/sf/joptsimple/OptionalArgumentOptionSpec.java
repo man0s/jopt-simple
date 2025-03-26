@@ -33,7 +33,7 @@ import java.util.List;
  * @param <V> represents the type of the arguments this option accepts
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-class OptionalArgumentOptionSpec<V> extends ArgumentAcceptingOptionSpec<V> {
+final class OptionalArgumentOptionSpec<V> extends ArgumentAcceptingOptionSpec<V> {
     OptionalArgumentOptionSpec( String option ) {
         super( option, false );
     }
@@ -53,17 +53,17 @@ class OptionalArgumentOptionSpec<V> extends ArgumentAcceptingOptionSpec<V> {
                 addArguments( detectedOptions, arguments.next() );
             else
                 detectedOptions.add( this );
-        }
-        else
+        } else {
             detectedOptions.add( this );
+        }
     }
 
     private void handleOptionArgument( OptionParser parser, OptionSet detectedOptions, ArgumentList arguments ) {
         if ( parser.posixlyCorrect() ) {
             detectedOptions.add( this );
             parser.noMoreOptions();
-        }
-        else
+        } else {
             addArguments( detectedOptions, arguments.next() );
+        }
     }
 }

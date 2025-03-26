@@ -189,13 +189,13 @@ public class TypesafeOptionArgumentRetrievalTest extends AbstractOptionParserFix
 
         OptionSet options = parser.parse( "-e" );
 
-        assertFalse( options.has( new FakeOptionSpec<Void>( "e" ) ) );
+        assertFalse( options.has( new RequiredArgumentOptionSpec<Void>( "e" ) ) );
     }
 
     @Test
     public void cannotFoolHasArgumentWithAnOptionNotIssuedFromBuilder() {
         parser.accepts( "f" ).withRequiredArg();
-        OptionSpec<String> fakeOptionF = new FakeOptionSpec<>( "f" );
+        OptionSpec<String> fakeOptionF = new RequiredArgumentOptionSpec<>( "f" );
 
         OptionSet options = parser.parse( "-f", "boo" );
 
@@ -208,7 +208,7 @@ public class TypesafeOptionArgumentRetrievalTest extends AbstractOptionParserFix
 
         OptionSet options = parser.parse( "-g", "foo" );
 
-        assertNull( options.valueOf( new FakeOptionSpec<String>( "g" ) ) );
+        assertNull( options.valueOf( new RequiredArgumentOptionSpec<String>( "g" ) ) );
     }
 
     @Test
@@ -217,7 +217,7 @@ public class TypesafeOptionArgumentRetrievalTest extends AbstractOptionParserFix
 
         OptionSet options = parser.parse( "-h", "foo", "-h", "bar" );
 
-        assertEquals( emptyList(), options.valuesOf( new FakeOptionSpec<String>( "h" ) ) );
+        assertEquals( emptyList(), options.valuesOf( new RequiredArgumentOptionSpec<String>( "h" ) ) );
     }
 
     @Test
@@ -304,33 +304,5 @@ public class TypesafeOptionArgumentRetrievalTest extends AbstractOptionParserFix
 
         var exception = assertThrows( OptionException.class, () -> optionM.value( options ) );
         assertTrue( exception.getCause() instanceof ValueConversionException );
-    }
-
-    private static class FakeOptionSpec<V> implements OptionSpec<V> {
-        private final String option;
-
-        FakeOptionSpec(String option) {
-            this.option = option;
-        }
-
-        @Override
-        public List<String> options() {
-            return singletonList( option );
-        }
-
-        @Override
-        public V value( OptionSet detectedOptions ) {
-            return detectedOptions.valueOf( this );
-        }
-
-        @Override
-        public List<V> values( OptionSet detectedOptions ) {
-            return detectedOptions.valuesOf( this );
-        }
-
-        @Override
-        public boolean isForHelp() {
-            return false;
-        }
     }
 }

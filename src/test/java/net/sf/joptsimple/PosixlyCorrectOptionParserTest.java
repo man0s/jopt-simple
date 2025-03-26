@@ -35,9 +35,6 @@ import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import net.sf.joptsimple.OptionParser;
-import net.sf.joptsimple.OptionSet;
-
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */

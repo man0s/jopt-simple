@@ -30,9 +30,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 
-import net.sf.joptsimple.OptionParser;
-import net.sf.joptsimple.OptionSet;
-
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */

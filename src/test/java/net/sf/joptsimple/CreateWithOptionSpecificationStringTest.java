@@ -29,8 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import net.sf.joptsimple.OptionParser;
-
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */

@@ -31,6 +31,7 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.*;
 import static java.util.Objects.*;
@@ -54,7 +55,10 @@ public class OptionSet {
         detectedSpecs = new ArrayList<>();
         detectedOptions = new HashMap<>();
         optionsToArguments = new IdentityHashMap<>();
-        defaultValues = defaultValues( recognizedSpecs );
+        defaultValues = recognizedSpecs.entrySet().stream()
+            .collect( Collectors.toUnmodifiableMap(
+                Map.Entry::getKey,
+                e -> List.copyOf( e.getValue().defaultValues() ) ) );
         this.recognizedSpecs = recognizedSpecs;
     }
 
@@ -129,7 +133,7 @@ public class OptionSet {
     }
 
     /**
-     * Gives the argument associated with the given option.  If the option was given an argument type, the argument
+     * Gives the argument associated with the given option. If the option was given an argument type, the argument
      * will take on that type; otherwise, it will be a {@link String}.
      *
      * <p>Specifying a {@linkplain ArgumentAcceptingOptionSpec#defaultsTo(Object, Object[]) default argument value}
@@ -213,7 +217,7 @@ public class OptionSet {
     }
 
     /**
-     * <p>Gives any arguments associated with the given option.  If the option was given an argument type, the
+     * <p>Gives any arguments associated with the given option. If the option was given an argument type, the
      * arguments will take on that type; otherwise, they will be {@link String}s.</p>
      *
      * @param option the option to search for
@@ -229,7 +233,7 @@ public class OptionSet {
     }
 
     /**
-     * <p>Gives any arguments associated with the given option.  If the option was given an argument type, the
+     * <p>Gives any arguments associated with the given option. If the option was given an argument type, the
      * arguments will take on that type; otherwise, they will be {@link String}s.</p>
      *
      * <p>This method recognizes only instances of options returned from the fluent interface methods.</p>
@@ -250,11 +254,7 @@ public class OptionSet {
             return defaultValueFor( option );
 
         AbstractOptionSpec<V> spec = (AbstractOptionSpec<V>) option;
-        List<V> convertedValues = new ArrayList<>();
-        for ( String each : values )
-            convertedValues.add( spec.convert( each ) );
-
-        return unmodifiableList( convertedValues );
+        return values.stream().map( spec::convert ).toList();
     }
 
     /**
@@ -331,17 +331,13 @@ public class OptionSet {
     }
 
     @Override
-    public boolean equals( Object that ) {
-        if ( this == that )
-            return true;
-
-        if ( that == null || !getClass().equals( that.getClass() ) )
+    public boolean equals( Object obj ) {
+        if ( !( obj instanceof OptionSet that ) ) {
             return false;
-
-        OptionSet other = (OptionSet) that;
+        }
         Map<AbstractOptionSpec<?>, List<String>> thisOptionsToArguments = new HashMap<>( optionsToArguments );
-        Map<AbstractOptionSpec<?>, List<String>> otherOptionsToArguments = new HashMap<>( other.optionsToArguments );
-        return detectedOptions.equals( other.detectedOptions )
+        Map<AbstractOptionSpec<?>, List<String>> otherOptionsToArguments = new HashMap<>( that.optionsToArguments );
+        return detectedOptions.equals( that.detectedOptions )
             && thisOptionsToArguments.equals( otherOptionsToArguments );
     }
 
@@ -353,20 +349,10 @@ public class OptionSet {
 
     @SuppressWarnings( "unchecked" )
     private <V> List<V> defaultValuesFor( String option ) {
-        if ( defaultValues.containsKey( option ) )
-            return unmodifiableList( (List<V>) defaultValues.get( option ) );
-
-        return emptyList();
+        return (List<V>) defaultValues.getOrDefault( option, List.of() );
     }
 
     private <V> List<V> defaultValueFor( OptionSpec<V> option ) {
         return defaultValuesFor( option.options().iterator().next() );
-    }
-
-    private static Map<String, List<?>> defaultValues( Map<String, AbstractOptionSpec<?>> recognizedSpecs ) {
-        Map<String, List<?>> defaults = new HashMap<>();
-        for ( Map.Entry<String, AbstractOptionSpec<?>> each : recognizedSpecs.entrySet() )
-            defaults.put( each.getKey(), each.getValue().defaultValues() );
-        return defaults;
     }
 }

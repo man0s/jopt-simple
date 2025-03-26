@@ -56,7 +56,7 @@ import java.util.List;
  *
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-public class OptionSpecBuilder extends NoArgumentOptionSpec {
+public final class OptionSpecBuilder extends NoArgumentOptionSpec {
     private final OptionParser parser;
 
     OptionSpecBuilder( OptionParser parser, List<String> options, String description ) {

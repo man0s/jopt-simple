@@ -28,6 +28,7 @@ package net.sf.joptsimple;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static java.util.Collections.*;
 
@@ -40,8 +41,9 @@ import static net.sf.joptsimple.internal.Strings.*;
  * @param <V> represents the type of the arguments this option accepts
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-public abstract class AbstractOptionSpec<V> implements OptionSpec<V>, OptionDescriptor {
-    private final List<String> options = new ArrayList<>();
+sealed abstract class AbstractOptionSpec<V> implements OptionSpec<V>, OptionDescriptor
+        permits ArgumentAcceptingOptionSpec, NoArgumentOptionSpec, NonOptionArgumentSpec {
+    private final List<String> options;
     private final String description;
     private boolean forHelp;
 
@@ -50,14 +52,13 @@ public abstract class AbstractOptionSpec<V> implements OptionSpec<V>, OptionDesc
     }
 
     AbstractOptionSpec( List<String> options, String description ) {
-        arrangeOptions( options );
-
+        this.options = arrangeOptions( options );
         this.description = description;
     }
 
     @Override
     public final List<String> options() {
-        return unmodifiableList( options );
+        return options;
     }
 
     @Override
@@ -114,12 +115,11 @@ public abstract class AbstractOptionSpec<V> implements OptionSpec<V>, OptionDesc
     }
 
     abstract void handleOption( OptionParser parser, ArgumentList arguments, OptionSet detectedOptions,
-        String detectedArgument );
+            String detectedArgument );
 
-    private void arrangeOptions( List<String> unarranged ) {
+    private static List<String> arrangeOptions( List<String> unarranged ) {
         if ( unarranged.size() == 1 ) {
-            options.addAll( unarranged );
-            return;
+            return List.copyOf( unarranged );
         }
 
         List<String> shortOptions = new ArrayList<>();
@@ -132,20 +132,12 @@ public abstract class AbstractOptionSpec<V> implements OptionSpec<V>, OptionDesc
                 longOptions.add( each );
         }
 
-        sort( shortOptions );
-        sort( longOptions );
-
-        options.addAll( shortOptions );
-        options.addAll( longOptions );
+        return Stream.concat( shortOptions.stream().sorted(), longOptions.stream().sorted() ).toList();
     }
 
     @Override
-    public boolean equals( Object that ) {
-        if ( !( that instanceof AbstractOptionSpec<?> ) )
-            return false;
-
-        AbstractOptionSpec<?> other = (AbstractOptionSpec<?>) that;
-        return options.equals( other.options );
+    public boolean equals( Object obj ) {
+        return obj instanceof AbstractOptionSpec<?> that && options.equals( that.options );
     }
 
     @Override

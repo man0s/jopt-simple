@@ -33,9 +33,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import net.sf.joptsimple.OptionParser;
-import net.sf.joptsimple.OptionSpec;
-
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */

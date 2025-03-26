@@ -32,12 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import net.sf.joptsimple.OptionParser;
-import net.sf.joptsimple.OptionSet;
-import net.sf.joptsimple.OptionSpec;
-import net.sf.joptsimple.ValueConversionException;
-import net.sf.joptsimple.ValueConverter;
-
 /**
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */

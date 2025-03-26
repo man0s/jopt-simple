@@ -35,7 +35,7 @@ import static java.util.Collections.*;
  *
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-class NoArgumentOptionSpec extends AbstractOptionSpec<Void> {
+sealed class NoArgumentOptionSpec extends AbstractOptionSpec<Void> permits OptionSpecBuilder {
     NoArgumentOptionSpec( String option ) {
         this( singletonList( option ), "" );
     }

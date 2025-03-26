@@ -38,7 +38,7 @@ import static net.sf.joptsimple.ParserRules.*;
  *
  * @author <a href="mailto:pholser@alumni.rice.edu">Paul Holser</a>
  */
-class AlternativeLongOptionSpec extends ArgumentAcceptingOptionSpec<String> {
+final class AlternativeLongOptionSpec extends ArgumentAcceptingOptionSpec<String> {
     AlternativeLongOptionSpec() {
         super( singletonList( RESERVED_FOR_EXTENSIONS ),
             true,
