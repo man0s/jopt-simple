@@ -82,7 +82,7 @@ publishing {
             }
         }
         maven {
-            name = 'GitHub Packages'
+            name = 'GitHubPackages'
             url = 'https://maven.pkg.github.com/jopt-simple/jopt-simple'
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
