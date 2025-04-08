@@ -39,10 +39,6 @@ publishing {
                 name = 'JOpt Simple'
                 description = 'A Java library for parsing command line options'
                 url = 'https://jopt-simple.github.io/jopt-simple'
-                properties = [
-                    myProp: "value",
-                    "prop.with.dots": "anotherValue"
-                ]
                 licenses {
                     license {
                         name = 'The MIT License'
@@ -86,8 +82,8 @@ publishing {
             }
         }
         maven {
-            name = "GitHubPackages"
-            url = "https://maven.pkg.github.com/jopt-simple/jopt-simple"
+            name = 'GitHub Packages'
+            url = 'https://maven.pkg.github.com/jopt-simple/jopt-simple'
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")
